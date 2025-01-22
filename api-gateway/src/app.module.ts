@@ -1,33 +1,18 @@
 import { Module } from '@nestjs/common';
-import { MiddlewareConsumer } from '@nestjs/common';
-import { HttpProxyMiddleware } from 'http-proxy-middleware';
-import { AppService } from './app.service';
-import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './shared/database/database.module';
+import { AuthModule } from './auth/auth.module';
+import { GatewayModule } from './gateway/gateway.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    DatabaseModule,
+    ConfigModule.forRoot(),
+    AuthModule,
+    GatewayModule,
+  ],
+  controllers: [],
+  providers: [],
 })
-@Module({})
 export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(
-        HttpProxyMiddleware.createProxyMiddleware({
-          target: 'http://localhost:3001', // User Service
-          changeOrigin: true,
-        }),
-      )
-      .forRoutes('/users');
-
-    consumer
-      .apply(
-        HttpProxyMiddleware.createProxyMiddleware({
-          target: 'http://localhost:3002', // Property Service
-          changeOrigin: true,
-        }),
-      )
-      .forRoutes('/properties');
-  }
 }

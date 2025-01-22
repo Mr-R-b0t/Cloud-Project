@@ -5,3 +5,4 @@
 /payment-service/node_modules/
 /property-service/node_modules/
 /user-service/node_modules/
+/api-gateway/.env
