@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../entity/user.entity';
+import { WalletDto} from "../controller/dto/wallet.dto";
 import { UserDto } from '../controller/dto/user.dto';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(UserEntity) private readonly userRepo: Repository<UserEntity>,
+        @InjectRepository(WalletDto) private readonly walletRepo: Repository<WalletDto>,
     ) {}
 
     private userEntityToDto(user: Partial<UserEntity>): UserDto {
@@ -17,7 +19,6 @@ export class UsersService {
         userDto.firstname = user.firstname;
         userDto.lastname = user.lastname;
         userDto.role = user.role;
-        userDto.walletBalance = user.walletBalance;
         return userDto;
     }
 
@@ -39,6 +40,10 @@ export class UsersService {
     // Create a user
     async createUser(user: Partial<UserEntity>): Promise<string> {
         const createdUser = await this.userRepo.save(user);
+        const wallet = new WalletDto();
+        wallet.balance = 0;
+        wallet.userId = createdUser.id;
+        await this.walletRepo.save(wallet);
         return createdUser.id;
     }
 
@@ -63,22 +68,22 @@ export class UsersService {
 
     // Update wallet balance
     async updateWalletBalance(id: string, amount: number): Promise<number> {
-        const user = await this.userRepo.findOne({ where: { id } });
-        if (!user) {
-            throw new Error(`User with ID ${id} not found`);
+        const wallet = await this.walletRepo.findOne({ where: { userId: id } });
+        if (!wallet) {
+            throw new Error(`Wallet for user with ID ${id} not found`);
         }
-        user.walletBalance += amount;
-        await this.userRepo.save(user);
-        return user.walletBalance;
+        wallet.balance += amount;
+        await this.walletRepo.save(wallet);
+        return wallet.balance;
     }
 
     // Get wallet balance
     async getWalletBalance(id: string): Promise<number> {
-        const user = await this.userRepo.findOne({ where: { id } });
-        if (!user) {
-            throw new Error(`User with ID ${id} not found`);
+        const wallet = await this.walletRepo.findOne({ where: { userId: id } });
+        if (!wallet) {
+            throw new Error(`Wallet for user with ID ${id} not found`);
         }
-        return user.walletBalance;
+        return wallet.balance;
     }
 
     // Update user role (admin feature)

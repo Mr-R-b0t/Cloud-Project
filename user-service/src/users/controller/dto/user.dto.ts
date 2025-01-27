@@ -4,5 +4,4 @@ export class UserDto {
     role: string;
     firstname: string;
     lastname: string;
-    walletBalance: number;
 }

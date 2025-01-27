@@ -20,6 +20,4 @@ export class UserEntity {
     @Column()
     lastname: string;
 
-    @Column('decimal', { precision: 12, scale: 2, default: 0 })
-    walletBalance: number;
 }
