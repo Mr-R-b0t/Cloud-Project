@@ -1,13 +1,19 @@
+import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { UsersController } from './users/users.controller';
-import { UsersService } from './users/users.service';
+import { DatabaseModule } from './shared/database/database.module'
+import {UsersModule} from "./users/users.module";
+import {GatewayModule} from "./gateway/gateway.module";
+
 
 @Module({
-  imports: [UsersModule],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UsersService],
+  imports: [
+    DatabaseModule,
+    ConfigModule.forRoot(),
+    UsersModule,
+    GatewayModule,
+  ],
+  controllers: [],
+  providers: [],
 })
-export class AppModule {}
+export class AppModule {
+}
