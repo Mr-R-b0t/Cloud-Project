@@ -1,4 +1,4 @@
-import { Controller, Get, Body} from '@nestjs/common';
+import { Controller, Get, Post, Patch,Delete,Body} from '@nestjs/common';
 
 import {UsersService} from "../service/users.service";
 import {UserEntity} from "../entity/user.entity";
@@ -12,17 +12,17 @@ export class UsersController {
         return await this.userService.getMe( id);
     }
 
-    @Get('me/delete')
+    @Delete('me/delete')
     async deleteMe(@Body('id') id: string){
         return await this.userService.deleteMe(id);
     }
 
-    @Get('me/update')
+    @Patch('me/update')
     async updateMe(@Body('id') id: string, @Body('updateData') updateData: Partial<UserEntity>) {
         return await this.userService.updateMe( id, updateData);
     }
 
-    @Get('create')
+    @Post('create')
     async createUser(@Body('user') user: Partial<UserEntity>){
         return await this.userService.createUser(user);
     }
@@ -32,12 +32,12 @@ export class UsersController {
         return await this.userService.getUserById(id);
     }
 
-    @Get('updateProfile')
+    @Patch('updateProfile')
     async updateProfile(@Body('id') id: string, @Body('updateData') updateData: Partial<UserEntity>){
         return await this.userService.updateProfile(id, updateData);
     }
 
-    @Get('updateWalletBalance')
+    @Patch('updateWalletBalance')
     async updateWalletBalance(@Body('id') id: string, @Body('amount') amount: number){
         return await this.userService.updateWalletBalance(id, amount);
     }
@@ -47,7 +47,7 @@ export class UsersController {
         return await this.userService.getWalletBalance(id);
     }
 
-    @Get('updateUserRole')
+    @Patch('updateUserRole')
     async updateUserRole(@Body('id') id: string, @Body('role') role: string){
         return await this.userService.updateUserRole(id, role);
     }
