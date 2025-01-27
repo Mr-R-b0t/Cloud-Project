@@ -4,6 +4,8 @@
 /notification-service/node_modules/
 /payment-service/node_modules/
 /payment-service/.env
+/payment-service/dist/
+
 /property-service/node_modules/
 /user-service/node_modules/
 /api-gateway/.env
