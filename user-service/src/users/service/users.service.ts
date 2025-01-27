@@ -4,13 +4,17 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '../entity/user.entity';
 import { WalletDto} from "../controller/dto/wallet.dto";
 import { UserDto } from '../controller/dto/user.dto';
-
+import {WalletEntity} from "../entity/wallet.entity";
+import {Logger} from "@nestjs/common";
+import {WalletUpdateDto} from "../controller/dto/walletUpdate.dto";
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(UserEntity) private readonly userRepo: Repository<UserEntity>,
-        @InjectRepository(WalletDto) private readonly walletRepo: Repository<WalletDto>,
+        @InjectRepository(WalletEntity) private readonly walletRepo: Repository<WalletEntity>,
     ) {}
+
+    private readonly LOGGER = new Logger(UsersService.name);
 
     private userEntityToDto(user: Partial<UserEntity>): UserDto {
         const userDto = new UserDto();
@@ -67,15 +71,25 @@ export class UsersService {
     }
 
     // Update wallet balance
-    async updateWalletBalance(id: string, amount: number): Promise<number> {
+    async updateWalletBalance(id: string, walletUpdate: WalletUpdateDto): Promise<number> {
+        this.LOGGER.log(`Updating wallet balance for user with ID ${id} by ${JSON.stringify(walletUpdate.amount)}`);
+
+        if (typeof walletUpdate.amount !== 'number' || isNaN(walletUpdate.amount)) {
+            throw new Error(`Invalid amount: ${walletUpdate.amount}`);
+        }
+
         const wallet = await this.walletRepo.findOne({ where: { userId: id } });
+
         if (!wallet) {
             throw new Error(`Wallet for user with ID ${id} not found`);
         }
-        wallet.balance += amount;
+
+        wallet.balance += walletUpdate.amount;
         await this.walletRepo.save(wallet);
+
         return wallet.balance;
     }
+
 
     // Get wallet balance
     async getWalletBalance(id: string): Promise<number> {
@@ -108,7 +122,10 @@ export class UsersService {
     }
 
     // Fetch all users
-    async getUsers(): Promise<UserEntity[]> {
-        return this.userRepo.find();
+    async getUsers(): Promise<UserDto[]> {
+        const userEntity = await this.userRepo.find({
+            select: ['id', 'firstname', 'lastname', 'email', 'role'],
+        });
+        return userEntity.map((user) => this.userEntityToDto(user));
     }
 }

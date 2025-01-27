@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { databaseConfig } from './database.config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies/snake-naming.strategy';
 
 @Module({
   imports: [
