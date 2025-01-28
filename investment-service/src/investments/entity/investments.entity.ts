@@ -1,6 +1,7 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity()
+@Unique(['userId', 'propertyId'])
 export class InvestmentEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;

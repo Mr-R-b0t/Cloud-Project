@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InvestmentEntity } from '../entity/investments.entity';
 import { Repository } from 'typeorm';
@@ -10,9 +10,16 @@ export class InvestmentsService {
         @InjectRepository(InvestmentEntity) private readonly investmentRepository: Repository<InvestmentEntity>,
     ) {}
 
-    async create(createInvestmentDto: CreateInvestmentDto ){
-        const investment = this.investmentRepository.create(createInvestmentDto);
-        return this.investmentRepository.save(investment);
+    async create(createInvestmentDto: CreateInvestmentDto) {
+        try {
+            const investment = this.investmentRepository.create(createInvestmentDto);
+            return await this.investmentRepository.save(investment);
+        } catch (error) {
+            if (error.code === '23505') { // Unique violation error code for PostgreSQL
+                throw new ConflictException('Investment for this user and property already exists');
+            }
+            throw error;
+        }
     }
 
     async findAllInvestments(){
