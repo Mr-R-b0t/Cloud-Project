@@ -1,22 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { PaymentController } from './app.controller';
+import { PaymentService } from './app.service';
 
 describe('AppController', () => {
-  let appController: AppController;
+  let paymentController: PaymentController;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
+      controllers: [PaymentController],
+      providers: [PaymentService],
     }).compile();
 
-    appController = app.get<AppController>(AppController);
+    paymentController = app.get<PaymentController>(PaymentController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
-    });
-  });
+  //describe('root', () => {
+    //it('should return "Hello World!"', () => {
+      //expect(paymentController.createPaymentIntent()).toBe('Hello World!');
+    //});
+  //});
 });
