@@ -5,11 +5,10 @@ import { InvestmentsController } from './controller/investments.controller';
 import { InvestmentsService } from './service/investments.service';
 
 @Module({
-    imports:[
+    imports: [
         TypeOrmModule.forFeature([InvestmentEntity]),
     ],
     controllers: [InvestmentsController],
     providers: [InvestmentsService],
 })
-
 export class InvestmentsModule {}

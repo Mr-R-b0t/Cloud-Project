@@ -27,6 +27,10 @@ export class InvestmentsService {
         return this.investmentRepository.find({ where: { userId } });
     }
 
+    async findInvestmentsByPropertyId(propertyId: string) {
+        return this.investmentRepository.find({ where: { propertyId } });
+    }
+
     async updateInvestment(id: string, updateInvestmentDto: Partial<CreateInvestmentDto>) {
         await this.investmentRepository.update(id, updateInvestmentDto);
         return this.findInvestmentById(id);
