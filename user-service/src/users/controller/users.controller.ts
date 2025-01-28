@@ -100,7 +100,7 @@ export class UsersController {
     /**
      * Delete a user by ID (admin feature).
      */
-    @Delete(':id')
+    @Delete('profile/:id')
     async deleteUser(@Param('id') id: string) {
         return await this.usersService.deleteUser(id);
     }
