@@ -38,7 +38,7 @@ export class UsersController {
     /**
      * Get user details by ID (admin feature).
      */
-    @Get(':id')
+    @Get('/profile/:id')
     async getUserById(@Param('id') id: string) {
         return await this.usersService.getUserById(id);
     }
