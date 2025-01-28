@@ -8,32 +8,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
-const typeorm_1 = require("@nestjs/typeorm");
 const config_1 = require("@nestjs/config");
-const properties_module_1 = require("./properties/properties.module");
+const database_module_1 = require("./shared/database/database.module");
+const properties_module_1 = require("./properties/module/properties.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            config_1.ConfigModule.forRoot({ isGlobal: true }),
-            typeorm_1.TypeOrmModule.forRootAsync({
-                imports: [config_1.ConfigModule],
-                inject: [config_1.ConfigService],
-                useFactory: (configService) => ({
-                    type: 'postgres',
-                    host: configService.get('DB_HOST', 'localhost'),
-                    port: configService.get('DB_PORT', 5432),
-                    username: configService.get('DB_USERNAME', 'postgres'),
-                    password: configService.get('DB_PASSWORD', 'password'),
-                    database: configService.get('DB_NAME', 'propertydb'),
-                    autoLoadEntities: true,
-                    synchronize: configService.get('DB_SYNC', true),
-                }),
-            }),
-            properties_module_1.PropertyModule,
-        ],
+        imports: [database_module_1.DatabaseModule, config_1.ConfigModule.forRoot(), properties_module_1.PropertyModule],
+        controllers: [],
+        providers: [],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

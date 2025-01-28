@@ -7,7 +7,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { PropertyService } from './properties.service';
+import { PropertyService } from '../service/properties.service';
 import { CreatePropertyDto } from './dto/property.dto';
 import { UpdatePropertyDto } from './dto/property.dto';
 

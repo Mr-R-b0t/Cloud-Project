@@ -16,14 +16,13 @@ export class CreatePropertyDto {
 
   @IsNotEmpty()
   @IsString()
-  status: string; // e.g., funding, funded
+  status: string;
 
   @IsNotEmpty()
   @IsDateString()
   fundingDeadline: string;
 }
 
-// UpdatePropertyDto: Data Transfer Object for updating a property
 import { PartialType } from '@nestjs/mapped-types';
 
 export class UpdatePropertyDto extends PartialType(CreatePropertyDto) {}
