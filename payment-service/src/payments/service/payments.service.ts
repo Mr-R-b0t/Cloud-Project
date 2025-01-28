@@ -16,7 +16,6 @@ export class PaymentService {
     @InjectRepository(Payment)
     private paymentRepository: Repository<Payment>,
     private configService: ConfigService,
-    //private emailService: EmailService,
     //private walletService: WalletService,
   ) {
     this.stripe = new Stripe(this.configService.get('STRIPE_SECRET'), {
@@ -44,6 +43,7 @@ export class PaymentService {
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: Math.round(dto.amount * 100), // Convert to cents
       currency: 'eur',
+      confirm: true,
       payment_method_types: ['card'],
       metadata: { userId },
     });
@@ -58,7 +58,7 @@ export class PaymentService {
     });
 
     await this.paymentRepository.save(payment);
-
+    
     return {
       clientSecret: paymentIntent.client_secret,
       paymentId: payment.stripePaymentId,
