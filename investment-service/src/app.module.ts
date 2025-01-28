@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { InvestmentsModule } from './investments/investments.module';
-import { InvestmentsController } from './investments/controller/investments.controller';
-import { InvestmentsService } from './investments/service/investments.service';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './shared/database/database.module';
 
 @Module({
-  imports: [InvestmentsModule],
-  controllers: [AppController, InvestmentsController],
-  providers: [AppService, InvestmentsService],
+  imports: [
+    DatabaseModule,
+    ConfigModule.forRoot(),
+    InvestmentsModule
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
