@@ -2,23 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, Pr
 
 @Entity()
 export class Payment {
-  @PrimaryColumn('varchar', { length: 255 })
+  @PrimaryGeneratedColumn()
   stripePaymentId: string;
-
-  //@ManyToOne(() => User)
-  //user: User;
-
-  @Column('decimal', { precision: 10, scale: 2 })
-  amount: number;
-
-  @Column()
-  status: PaymentStatus;
-
-  @Column()
-  paymentMethod: string;
-
-  @CreateDateColumn()
-  createdAt: Date;
 }
 
 
