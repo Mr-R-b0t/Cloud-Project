@@ -26,6 +26,11 @@ export class InvestmentsController {
         return this.investmentsService.findInvestmentsByUserId(userId);
     }
 
+    @Get('property/:propertyId')
+    async findInvestmentsByPropertyId(@Param('propertyId') propertyId: string) {
+        return this.investmentsService.findInvestmentsByPropertyId(propertyId);
+    }
+
     @Patch(':id')
     async updateInvestment(@Param('id') id: string, @Body() updateInvestmentDto: Partial<CreateInvestmentDto>) {
         return this.investmentsService.updateInvestment(id, updateInvestmentDto);
