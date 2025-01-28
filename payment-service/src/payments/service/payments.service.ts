@@ -1,75 +1,142 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Payment, PaymentStatus } from '../entity/payments.entity';
 import { CreatePaymentDto } from './../controller/dto/create-payment.js';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
-//import { EmailService } from '../email/email.service';
-//import { WalletService } from '../wallet/wallet.service';
+import axios from "axios"
+interface Payment {
+  id: string;
+  stripePaymentId: string;
+  amount: number;
+  paymentMethod: string;
+  status: 'pending' | 'completed' | 'failed';
+}
 
 @Injectable()
 export class PaymentService {
   private stripe: Stripe;
   private mockAnnualInvestments: Map<string, number>;
-  constructor(
-    @InjectRepository(Payment)
-    private paymentRepository: Repository<Payment>,
-    private configService: ConfigService,
-    //private walletService: WalletService,
-  ) {
+  private payments: Map<string, Payment> = new Map();
+
+  constructor(private configService: ConfigService) {
     this.stripe = new Stripe(this.configService.get('STRIPE_SECRET'), {
       apiVersion: '2024-12-18.acacia',
     });
     this.mockAnnualInvestments = new Map([
-      ['123456897', 75000], // User with existing investments
-      ['987654321', 95000], // User close to limit
-      ['111222333', 0],     // New user
+      ['123456897', 75000],
+      ['987654321', 95000],
+      ['111222333', 0],
     ]);
   }
-  
 
   async createPaymentIntent(userId: string, dto: CreatePaymentDto) {
-    // Validate annual investment limit
     const annualTotal = await this.getAnnualInvestmentTotal(userId);
     if (annualTotal + dto.amount > 100000) {
-      throw new HttpException(
-        'Annual investment limit exceeded',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('Annual investment limit exceeded', HttpStatus.BAD_REQUEST);
     }
 
-    // Create Stripe PaymentIntent
+    if (!dto.paymentMethod) {
+      throw new HttpException('Payment method is required', HttpStatus.BAD_REQUEST);
+    }
+    
+
     const paymentIntent = await this.stripe.paymentIntents.create({
-      amount: Math.round(dto.amount * 100), // Convert to cents
+      amount: Math.round(dto.amount * 100),
       currency: 'eur',
       confirm: true,
+      payment_method: 'pm_card_visa',
+
       payment_method_types: ['card'],
       metadata: { userId },
     });
 
-    // Create payment record
-    const payment = this.paymentRepository.create({
+    const payment: Payment = {
+      id: crypto.randomUUID(),
       stripePaymentId: paymentIntent.id,
-      //user: { id: userId },
       amount: dto.amount,
-      status: PaymentStatus.PENDING,
       paymentMethod: dto.paymentMethod,
-    });
-
-    await this.paymentRepository.save(payment);
-    
-    return {
-      clientSecret: paymentIntent.client_secret,
-      paymentId: payment.stripePaymentId,
+      status: 'pending'
     };
+
+    
+    this.payments.set(payment.stripePaymentId, payment);
+    console.log(paymentIntent.status)
+    if (paymentIntent.status === 'succeeded') {
+      try {
+        
+        const response = await axios.patch(`http://localhost:3004/wallet/update/${paymentIntent.metadata.userId}`);
+        payment.status = response.status === 200 ? 'completed' : 'failed';
+        
+        const mockStripeEvent: Stripe.Event = {
+          id: 'evt_' + crypto.randomUUID(),
+          type: 'payment_intent.succeeded', 
+          data: {
+            object: paymentIntent, 
+          },
+          api_version: '2024-12-18.acacia',
+          created: Math.floor(Date.now() / 1000),
+          livemode: false,
+          pending_webhooks: 0,
+          request: {
+            id: 'req_' + crypto.randomUUID(),
+            idempotency_key: crypto.randomUUID(),
+          },
+          object: 'event',
+        };
+
+        await this.handlePaymentWebhook(mockStripeEvent);
+        return payment.status;
+      } catch (error) {
+        console.error("ERROR HERE", error)
+        payment.status = 'failed';
+        const mockStripeEvent: Stripe.Event = {
+          id: 'evt_' + crypto.randomUUID(),
+          type: 'payment_intent.payment_failed', // Trigger a failed payment event
+          data: {
+            object: paymentIntent, // Include the payment intent data
+          },
+          api_version: '2024-12-18.acacia',
+          created: Math.floor(Date.now() / 1000),
+          livemode: false,
+          pending_webhooks: 0,
+          request: {
+            id: 'req_' + crypto.randomUUID(),
+            idempotency_key: crypto.randomUUID(),
+          },
+          object: 'event',
+        };
+
+        await this.handlePaymentWebhook(mockStripeEvent);
+        return payment.status;
+      }
+    } else {
+        const mockStripeEvent: Stripe.Event = {
+          id: 'evt_' + crypto.randomUUID(),
+          type: 'payment_intent.payment_failed',
+          data: {
+            object: paymentIntent,
+          },
+          api_version: '2024-12-18.acacia',
+          created: Math.floor(Date.now() / 1000),
+          livemode: false,
+          pending_webhooks: 0,
+          request: {
+            id: 'req_' + crypto.randomUUID(),
+            idempotency_key: crypto.randomUUID(),
+          },
+          object: 'event',
+      };
+
+      await this.handlePaymentWebhook(mockStripeEvent);
+
+      payment.status = 'failed';
+      return payment.status;
+    }
   }
 
-  ///// WEBHOOK SECTION /////
   async handlePaymentWebhook(event: Stripe.Event) {
     const { type, data } = event;
-    console.log("Event type : ", event.type)
-
+    console.log("Event type : ", event.type);
+    
     switch (type) {
       case 'payment_intent.succeeded':
         await this.handleSuccessfulPayment(data.object as Stripe.PaymentIntent);
@@ -81,57 +148,22 @@ export class PaymentService {
   }
 
   private async handleSuccessfulPayment(paymentIntent: Stripe.PaymentIntent) {
-    const payment = await this.paymentRepository.findOne({
-      where: { stripePaymentId: paymentIntent.id },
-    });
-
+    const payment = this.payments.get(paymentIntent.id);
     if (!payment) return;
-
-    // Update payment status
-    payment.status = PaymentStatus.COMPLETED;
-    await this.paymentRepository.save(payment);
-
-    // Add funds to user's wallet
-    //await this.walletService.addFunds(payment.user.id, payment.amount);
-
-    // Send confirmation email
-    //await this.emailService.sendPaymentConfirmation(
-      //payment.user.email,
-      //payment.amount,
-    //);
+    payment.status = 'completed';
   }
 
   private async handleFailedPayment(paymentIntent: Stripe.PaymentIntent) {
-    const payment = await this.paymentRepository.findOne({
-      where: { stripePaymentId: paymentIntent.id },
-    });
-
+    const payment = this.payments.get(paymentIntent.id);
     if (!payment) return;
-
-    payment.status = PaymentStatus.FAILED;
-    await this.paymentRepository.save(payment);
+    payment.status = 'failed';
   }
+
   private async getAnnualInvestmentTotal(userId: string): Promise<number> {
     return this.mockAnnualInvestments.get(userId) || 0;
   }
-  /*
-    private async getAnnualInvestmentTotal(userId: string): Promise<number> {
-      const startOfYear = new Date(new Date().getFullYear(), 0, 1);
-      const endOfYear = new Date(new Date().getFullYear(), 11, 31);
-      
-      const result = await this.paymentRepository
-      .createQueryBuilder('payment')
-      .where('payment.userId = :userId', { userId })
-      .andWhere('payment.status = :status', { status: PaymentStatus.COMPLETED })
-      .andWhere('payment.createdAt BETWEEN :startDate AND :endDate', {
-        startDate: startOfYear,
-        endDate: endOfYear,
-      })
-      .select('SUM(payment.amount)', 'total')
-      .getRawOne();
-      
-      return result.total || 0;
-    }
-    */
-  
+}
+
+function execPromise(arg0: string): { stdout: any; stderr: any; } | PromiseLike<{ stdout: any; stderr: any; }> {
+  throw new Error('Function not implemented.');
 }

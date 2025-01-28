@@ -8,4 +8,5 @@
 
 /property-service/node_modules/
 /user-service/node_modules/
+/user-service/dist/
 /api-gateway/.env
