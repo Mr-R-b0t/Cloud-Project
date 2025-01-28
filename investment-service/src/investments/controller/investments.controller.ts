@@ -2,16 +2,16 @@ import { Controller, Get, Param, Patch, Delete, Body, Post } from '@nestjs/commo
 import { InvestmentsService } from '../service/investments.service';
 import { CreateInvestmentDto } from './dto/create-investement.dto';
 
-@Controller('investments')
+@Controller('')
 export class InvestmentsController {
     constructor(private readonly investmentsService: InvestmentsService) {}
 
-    @Post()
+    @Post('create')
     async create(@Body() createInvestmentDto: CreateInvestmentDto) {
         return this.investmentsService.create(createInvestmentDto);
     }
 
-    @Get()
+    @Get('all')
     async findAllInvestments() {
         return this.investmentsService.findAllInvestments();
     }
