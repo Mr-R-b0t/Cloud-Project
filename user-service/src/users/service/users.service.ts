@@ -26,29 +26,15 @@ export class UsersService {
         return userDto;
     }
 
-    // Get me
-    async getMe(id: string): Promise<UserDto> {
-        return this.userEntityToDto(await this.getUserById(id));
-    }
-
-    // Delete me
-    async deleteMe(id: string): Promise<boolean> {
-        return this.deleteUser(id);
-    }
-
-    // Update me
-    async updateMe(id: string, updateData: Partial<UserEntity>): Promise<UserDto> {
-        return this.userEntityToDto(await this.updateProfile(id, updateData));
-    }
-
     // Create a user
-    async createUser(user: Partial<UserEntity>): Promise<string> {
+    async createUser(user: UserEntity): Promise<UserDto> {
+        this.LOGGER.log(`Creating user with email: ${JSON.stringify(user.email)}`);
         const createdUser = await this.userRepo.save(user);
         const wallet = new WalletDto();
         wallet.balance = 0;
         wallet.userId = createdUser.id;
         await this.walletRepo.save(wallet);
-        return createdUser.id;
+        return createdUser
     }
 
     // Fetch user by ID

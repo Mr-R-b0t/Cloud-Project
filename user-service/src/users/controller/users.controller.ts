@@ -11,19 +11,10 @@ export class UsersController {
 
     constructor(private readonly userService: UsersService) {}
 
-    @Get('me')
-    async getMe(@Param('id') id: string){
-        return await this.userService.getMe( id);
-    }
 
-    @Delete('me/delete')
+    @Delete('delete/:id')
     async deleteMe(@Param('id') id: string){
-        return await this.userService.deleteMe(id);
-    }
-
-    @Patch('me/update')
-    async updateMe(@Param('id') id: string, @Body() updateData: Partial<UserEntity>) {
-        return await this.userService.updateMe( id, updateData);
+        return await this.userService.deleteUser(id);
     }
 
     @Post('create')
