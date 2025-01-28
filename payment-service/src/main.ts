@@ -6,7 +6,6 @@ async function bootstrap() {
   app.use(express.json({verify: (req: any, res, buf) => 
     {req.rawBody = buf;}  }));
   app.enableCors();
-  app.setGlobalPrefix('api'); 
   await app.listen(process.env.PORT ?? 3004);
 }
 bootstrap();
