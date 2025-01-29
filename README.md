@@ -33,11 +33,16 @@ This project involves designing and implementing a fractional property ownership
    git clone https://github.com/Cyb0nix/ssa-project.git
    cd ssa-project
     ```
-2. **start the services:**
+2. **Add copy the .env.example file and rename it to .env in each service folder:**
+   ```sh
+   cp .env.example .env
+   ```
+
+3**start the services:**
    ```sh
    docker-compose up --build
    ```
-3. **Access the API Gateway at `http://localhost:3000`.**
+4**Access the API Gateway at `http://localhost:3000`.**
 
 ### Postman Collection:
 - [PostMan Collection](SSA-Project.postman_collection.json)
