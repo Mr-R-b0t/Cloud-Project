@@ -13,6 +13,7 @@ import { UserEntity } from '../entity/user.entity';
 import { WalletUpdateDto } from './dto/walletUpdate.dto';
 import { CustomerUpdateDTO } from './dto/user.customer.update';
 import { Request } from 'express';
+import {UserRoles} from "../../shared/utils/api-enums";
 
 @Controller('users')
 export class UsersController {
@@ -117,7 +118,7 @@ export class UsersController {
      * Update the role of a user (admin feature).
      */
     @Patch('role/update/:id')
-    async updateUserRole(@Param('id') id: string, @Body('role') role: string) {
+    async updateUserRole(@Param('id') id: string, @Body('role') role: UserRoles) {
         return await this.usersService.updateUserRole(id, role);
     }
 }
