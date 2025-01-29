@@ -8,8 +8,10 @@ import {
   Delete,
 } from '@nestjs/common';
 import { PropertyService } from '../service/properties.service';
-import { CreatePropertyDto } from '../controller/dto/property.dto';
-import { UpdatePropertyDto } from '../controller/dto/property.dto';
+import {
+  CreatePropertyDto,
+  UpdatePropertyDto,
+} from '../controller/dto/property.dto';
 
 @Controller('properties')
 export class PropertyController {
