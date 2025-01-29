@@ -39,8 +39,7 @@ export class PaymentService {
     if (!dto.paymentMethod) {
       throw new HttpException('Payment method is required', HttpStatus.BAD_REQUEST);
     }
-
-    console.log("dtoamout", dto.amount)    
+    
     console.log("dtoamout", dto.amount)
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: Math.round(dto.amount * 100),
