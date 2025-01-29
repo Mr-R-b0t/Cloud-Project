@@ -12,7 +12,8 @@ import { createRoleMiddleware } from '../auth/middleware/role.middleware';
 @Module({})
 export class GatewayModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(createRoleMiddleware(UserRoles.manager)).forRoutes(
+
+    consumer.apply(JwtAuthMiddleware,createRoleMiddleware(UserRoles.manager)).forRoutes(
       '/users/delete/*',
       'users/wallet/balance/*',
       'users/update/*',
@@ -44,7 +45,7 @@ export class GatewayModule implements NestModule {
     );
 
     consumer.apply(createProxyMiddleware({
-        target: 'http://localhost:3001/users/create', // User Service
+        target: 'http://localhost:3001/users/create',
         changeOrigin: true,
         on: {
             proxyReq: fixRequestBody,
