@@ -1,12 +1,10 @@
-import { Controller, Post, Body, Headers, HttpException, Req, UseGuards, RawBodyRequest, Res, HttpCode, HttpStatus  } from '@nestjs/common';
+import { Controller, Post, Body, Headers, HttpException, Req, UseGuards, RawBodyRequest, Res, HttpCode, HttpStatus, Param  } from '@nestjs/common';
 import { PaymentService } from './../service/payments.service';
 import { CreatePaymentDto } from './../controller/dto/create-payment.js';
 import { Stripe } from 'stripe';
 import { ConfigService } from '@nestjs/config';
-//import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-
+import { CreateTransferDto } from './../controller/dto/create-transfer.js';
 @Controller('payments')
-//@UseGuards(JwtAuthGuard)
 export class PaymentController {
   private stripe: Stripe;
   constructor(
@@ -19,11 +17,9 @@ export class PaymentController {
   }
 
 
-  @Post('pay')
-  //createPaymentIntent(@Req() req, @Body() dto: CreatePaymentDto) {
-    createPaymentIntent(@Body() dto: CreatePaymentDto) {
-      const userId = "8511b6e4-2fe0-4f47-9626-97c7a108cc95"
-  return this.paymentService.createPaymentIntent(userId, dto);
+  @Post('pay/:id')
+    createPaymentIntent(@Param('id') id: string,@Body() dto: CreatePaymentDto) {
+    return this.paymentService.createPaymentIntent(id, dto);
   }
 
   @Post('webhooks')
@@ -43,4 +39,10 @@ export class PaymentController {
       throw new HttpException(err.message, 400);
     }
   }
+
+  @Post('pay-transfer')
+  async transferPayment(@Body() dto: CreateTransferDto){
+    return this.paymentService.paymentTransfer(dto);
+  }
+  
 }

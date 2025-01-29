@@ -3,6 +3,7 @@ import { CreatePaymentDto } from './../controller/dto/create-payment.js';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 import axios from "axios"
+import { CreateTransferDto } from '../controller/dto/create-transfer.js';
 interface Payment {
   id: string;
   stripePaymentId: string;
@@ -15,25 +16,15 @@ interface Payment {
 export class PaymentService {
   private readonly DEFAULT_PAYMENT_METHOD = "card";
   private stripe: Stripe;
-  private mockAnnualInvestments: Map<string, number>;
   private payments: Map<string, Payment> = new Map();
 
   constructor(private configService: ConfigService) {
     this.stripe = new Stripe(this.configService.get('STRIPE_SECRET'), {
       apiVersion: '2024-12-18.acacia',
     });
-    this.mockAnnualInvestments = new Map([
-      ['123456897', 75000],
-      ['987654321', 95000],
-      ['111222333', 0],
-    ]);
   }
 
   async createPaymentIntent(userId: string, dto: CreatePaymentDto) {
-    const annualTotal = await this.getAnnualInvestmentTotal(userId);
-    if (annualTotal + dto.amount > 100000) {
-      throw new HttpException('Annual investment limit exceeded', HttpStatus.BAD_REQUEST);
-    }
     const paymentMethod = dto.paymentMethod || this.DEFAULT_PAYMENT_METHOD;
 
     if (!dto.paymentMethod) {
@@ -47,7 +38,6 @@ export class PaymentService {
       currency: 'eur',
       confirm: true,
       payment_method: 'pm_card_visa',
-
       payment_method_types: ['card'],
       metadata: { userId },
     });
@@ -67,7 +57,7 @@ export class PaymentService {
       try {
         console.log(paymentIntent.status)
         const response = await axios.patch(
-          `http://localhost:3001/users/wallet/update/8511b6e4-2fe0-4f47-9626-97c7a108cc95`, 
+          `http://localhost:3001/users/wallet/update/${userId}`, 
           { amount: dto.amount },  
           {
             headers: {
@@ -120,29 +110,7 @@ export class PaymentService {
         await this.handlePaymentWebhook(mockStripeEvent);
         return payment.status;
       }
-    } else {
-        const mockStripeEvent: Stripe.Event = {
-          id: 'evt_' + crypto.randomUUID(),
-          type: 'payment_intent.payment_failed',
-          data: {
-            object: paymentIntent,
-          },
-          api_version: '2024-12-18.acacia',
-          created: Math.floor(Date.now() / 1000),
-          livemode: false,
-          pending_webhooks: 0,
-          request: {
-            id: 'req_' + crypto.randomUUID(),
-            idempotency_key: crypto.randomUUID(),
-          },
-          object: 'event',
-      };
-
-      await this.handlePaymentWebhook(mockStripeEvent);
-
-      payment.status = 'failed';
-      return payment.status;
-    }
+    } 
   }
 
   async handlePaymentWebhook(event: Stripe.Event) {
@@ -213,8 +181,49 @@ export class PaymentService {
     
   }
 
-  private async getAnnualInvestmentTotal(userId: string): Promise<number> {
-    return this.mockAnnualInvestments.get(userId) || 0;
+
+  async paymentTransfer(dto: CreateTransferDto){
+    const {amount, idSender, idReceiver} = dto;
+    try {
+      const senderResponse = await axios.get(`http://localhost:3001/users/wallet/balance/${idSender}`);
+      const receiverResponse = await axios.get(`http://localhost:3001/users/wallet/balance/${idReceiver}`);
+      console.log("senderResponse", senderResponse.data)
+      console.log("receiverResponse", receiverResponse.data)
+      const senderBalance = senderResponse.data;
+      const receiverBalance = receiverResponse.data;
+      console.log("senderBalance", senderBalance)
+      console.log("receiverBalance", receiverBalance)
+      if (senderBalance < amount) {
+        throw new HttpException('Insufficient funds', HttpStatus.BAD_REQUEST);
+      }
+
+      await axios.patch(
+        `http://localhost:3001/users/wallet/update/${idSender}`,
+        { amount: -amount },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      await axios.patch(
+        `http://localhost:3001/users/wallet/update/${idReceiver}`,
+        { amount: amount },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      return { status: 'success', message: 'Transfer completed successfully' };
+    } catch (error) {
+      console.log("ERROR", error)
+      throw new Error('Transfer failed');
+    }
   }
+
+
 }
 
