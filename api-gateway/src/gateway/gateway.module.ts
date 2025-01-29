@@ -7,25 +7,14 @@ import {
 import { createProxyMiddleware, fixRequestBody } from 'http-proxy-middleware';
 import { UserRoles } from '../shared/utils/api-enums';
 import { JwtAuthMiddleware } from '../auth/middleware/jwt-auth.middleware';
-import {createRoleMiddleware } from '../auth/middleware/role.middleware';
+import { createRoleMiddleware } from '../auth/middleware/role.middleware';
 
 @Module({})
 export class GatewayModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(JwtAuthMiddleware)
-      .forRoutes(
-        '/users',
-        '/properties',
-        '/investments',
-        '/payments',
-        '/notifications',
-      );
-
     consumer.apply(createRoleMiddleware(UserRoles.manager)).forRoutes(
       '/users/delete/*',
       'users/wallet/balance/*',
-      'users/create',
       'users/update/*',
       'users/profile/*',
       'users/role/update/*',
@@ -56,6 +45,7 @@ export class GatewayModule implements NestModule {
 
     consumer
       .apply(
+        JwtAuthMiddleware,
         createProxyMiddleware({
           target: 'http://localhost:3001/users', // User Service
           changeOrigin: true,
@@ -68,6 +58,7 @@ export class GatewayModule implements NestModule {
 
     consumer
       .apply(
+        JwtAuthMiddleware,
         createProxyMiddleware({
           target: 'http://localhost:3002/properties', // Property Service
           changeOrigin: true,
@@ -80,6 +71,7 @@ export class GatewayModule implements NestModule {
 
     consumer
       .apply(
+        JwtAuthMiddleware,
         createProxyMiddleware({
           target: 'http://localhost:3003/investments', // Investment Service
           changeOrigin: true,
@@ -92,6 +84,7 @@ export class GatewayModule implements NestModule {
 
     consumer
       .apply(
+        JwtAuthMiddleware,
         createProxyMiddleware({
           target: 'http://localhost:3004/payments', // Payment Service
           changeOrigin: true,
@@ -104,6 +97,7 @@ export class GatewayModule implements NestModule {
 
     consumer
       .apply(
+        JwtAuthMiddleware,
         createProxyMiddleware({
           target: 'http://localhost:3005/notifications', // Notification Service
           changeOrigin: true,
