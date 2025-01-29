@@ -13,10 +13,6 @@
 /property-service/node_modules/
 /user-service/node_modules/
 /user-service/dist/
-/user-service/.env
-/user-service/.env
-
-/api-gateway/.env
 
 */dist
 */env

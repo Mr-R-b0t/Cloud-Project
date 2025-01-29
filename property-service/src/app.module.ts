@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PropertiesModule } from './properties/properties.module';
-import { PropertiesController } from './properties/properties.controller';
-import { PropertiesService } from './properties/properties.service';
+import { ConfigModule } from '@nestjs/config';
+import { DatabaseModule } from './shared/database/database.module';
+import { PropertyModule } from './properties/module/properties.module';
 
 @Module({
-  imports: [PropertiesModule],
-  controllers: [AppController, PropertiesController],
-  providers: [AppService, PropertiesService],
+  imports: [DatabaseModule, ConfigModule.forRoot(), PropertyModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
