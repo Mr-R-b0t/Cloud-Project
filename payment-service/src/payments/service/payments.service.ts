@@ -40,7 +40,7 @@ export class PaymentService {
       throw new HttpException('Payment method is required', HttpStatus.BAD_REQUEST);
     }
 
-    
+    console.log("dtoamout", dto.amount)    
     console.log("dtoamout", dto.amount)
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: Math.round(dto.amount * 100),
@@ -65,6 +65,17 @@ export class PaymentService {
     console.log(paymentIntent.status)
     if (paymentIntent.status === 'succeeded') {
       try {
+        console.log(paymentIntent.status)
+        const response = await axios.patch(
+          `http://localhost:3001/users/wallet/update/8511b6e4-2fe0-4f47-9626-97c7a108cc95`, 
+          { amount: dto.amount },  
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        
         console.log(paymentIntent.status)
         const response = await axios.patch(
           `http://localhost:3001/users/wallet/update/8511b6e4-2fe0-4f47-9626-97c7a108cc95`, 
