@@ -42,3 +42,10 @@ This project involves designing and implementing a fractional property ownership
 ### Postman Collection:
 - [PostMan Collection](SSA-Project.postman_collection.json)
 
+### Contributors:
+- Cédric YOGANATHAN
+- Julien KLEIN
+- Sébastien MEYNET
+- Valentin LABRUNE
+- Adriaan MEULENBELT-ZUMER
+
