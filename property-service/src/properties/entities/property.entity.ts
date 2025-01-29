@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Funding } from './funding.entity';
 
 @Entity()
 export class Property {
@@ -19,4 +20,7 @@ export class Property {
 
   @Column()
   fundingDeadline: Date;
+
+  @Column()
+  fundings: Funding[];
 }
