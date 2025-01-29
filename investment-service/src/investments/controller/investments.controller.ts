@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Delete, Body, Post } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Patch, Body, Post } from '@nestjs/common';
 import { InvestmentsService } from '../service/investments.service';
 import { CreateInvestmentDto } from './dto/create-investement.dto';
 
@@ -60,6 +60,15 @@ export class InvestmentsController {
     ) {
         return this.investmentsService.distributeRentalIncome(propertyId);
     }  
+
+    @Patch('sell')
+    async sellInvestment(
+        @Body('propertyId') propertyId: string,
+        @Body('userId') userId: string,
+        @Body('newUserId') newUserId: string,
+    ) {
+        return this.investmentsService.sellInvestment(userId, propertyId, newUserId);
+    }
 
     
 }
