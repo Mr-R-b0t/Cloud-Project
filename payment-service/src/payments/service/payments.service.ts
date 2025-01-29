@@ -26,7 +26,11 @@ export class PaymentService {
 
   async rechargeWallet(userId: string, dto: CreatePaymentDto) {
     const paymentMethod = dto.paymentMethod || this.DEFAULT_PAYMENT_METHOD;
-
+    const senderResponse = await axios.get(`http://localhost:3001/users/wallet/balance/${userId}`);
+    const userBalance = senderResponse.data;
+    if (userBalance < dto.amount) {
+      throw new HttpException('Insufficient funds', HttpStatus.BAD_REQUEST);
+    }
     if (!dto.paymentMethod) {
       throw new HttpException('Payment method is required', HttpStatus.BAD_REQUEST);
     }
@@ -92,7 +96,7 @@ export class PaymentService {
           },
           object: 'event',
         };
-        console.log("The payment is completed !")
+        console.log("The wallet has been recharged successfully")
         await this.handlePaymentWebhook(mockStripeEvent);
         return payment.status;
       } catch (error) {
@@ -192,7 +196,11 @@ export class PaymentService {
 
   async withrawFromWallet(userId: string, dto: CreatePaymentDto) {
     const paymentMethod = dto.paymentMethod || this.DEFAULT_PAYMENT_METHOD;
-
+    const senderResponse = await axios.get(`http://localhost:3001/users/wallet/balance/${userId}`);
+    const userBalance = senderResponse.data;
+    if (userBalance < dto.amount) {
+      throw new HttpException('Insufficient funds', HttpStatus.BAD_REQUEST);
+    }
     if (!dto.paymentMethod) {
       throw new HttpException('Payment method is required', HttpStatus.BAD_REQUEST);
     }
@@ -219,7 +227,7 @@ export class PaymentService {
       try {
         const response = await axios.patch(
           `http://localhost:3001/users/wallet/update/${userId}`, 
-          { amount: dto.amount },  
+          { amount: -dto.amount },  
           {
             headers: {
               'Content-Type': 'application/json',
@@ -245,7 +253,7 @@ export class PaymentService {
           },
           object: 'event',
         };
-        console.log("The payment is completed !")
+        console.log("Your withdraw is completed !")
         await this.handlePaymentWebhook(mockStripeEvent);
         return payment.status;
       } catch (error) {
