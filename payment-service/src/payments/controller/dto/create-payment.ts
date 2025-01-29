@@ -1,10 +1,10 @@
-import { IsNumber, IsString, Min } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreatePaymentDto {
   @IsNumber()
-  @Min(500)
   amount: number;
 
+  @IsOptional()
   @IsString()
-  paymentMethod: string;
+  paymentMethod?: string = "card";
 }

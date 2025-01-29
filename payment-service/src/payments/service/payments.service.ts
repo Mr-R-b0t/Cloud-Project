@@ -13,6 +13,7 @@ interface Payment {
 
 @Injectable()
 export class PaymentService {
+  private readonly DEFAULT_PAYMENT_METHOD = "card";
   private stripe: Stripe;
   private mockAnnualInvestments: Map<string, number>;
   private payments: Map<string, Payment> = new Map();
@@ -33,10 +34,12 @@ export class PaymentService {
     if (annualTotal + dto.amount > 100000) {
       throw new HttpException('Annual investment limit exceeded', HttpStatus.BAD_REQUEST);
     }
+    const paymentMethod = dto.paymentMethod || this.DEFAULT_PAYMENT_METHOD;
 
     if (!dto.paymentMethod) {
       throw new HttpException('Payment method is required', HttpStatus.BAD_REQUEST);
     }
+
     
     console.log("dtoamout", dto.amount)
     const paymentIntent = await this.stripe.paymentIntents.create({
@@ -157,15 +160,57 @@ export class PaymentService {
   }
 
   private async handleSuccessfulPayment(paymentIntent: Stripe.PaymentIntent) {
-    const payment = this.payments.get(paymentIntent.id);
-    if (!payment) return;
-    payment.status = 'completed';
+    try {
+        const response = await axios.post(
+        `http://localhost:3005/notifications/sendMail`, 
+        {
+          id: paymentIntent.id,
+          object: "Payment successfull !", 
+          body: "You have sucessfully paid you order !",
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log('Email sent successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error sending email:', error.response?.data || error.message);
+      throw new Error('Failed to send email');
+    }
+    
+    
+    
   }
 
   private async handleFailedPayment(paymentIntent: Stripe.PaymentIntent) {
+    try{
+
     const payment = this.payments.get(paymentIntent.id);
+    const response = await axios.post(
+      `http://localhost:3005/notifications/sendMail`, 
+      {
+        id: paymentIntent.id,
+        object: "Payment failed :/", 
+        body: "Something went wrong with your order.",
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    console.log('Email sent successfully:', response.data);
     if (!payment) return;
     payment.status = 'failed';
+    return response.data;
+  } catch (error) {
+    console.error('Error sending email:', error.response?.data || error.message);
+    throw new Error('Failed to send email');
+  }
+    
   }
 
   private async getAnnualInvestmentTotal(userId: string): Promise<number> {
@@ -173,6 +218,3 @@ export class PaymentService {
   }
 }
 
-function execPromise(arg0: string): { stdout: any; stderr: any; } | PromiseLike<{ stdout: any; stderr: any; }> {
-  throw new Error('Function not implemented.');
-}
