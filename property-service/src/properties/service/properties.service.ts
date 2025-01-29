@@ -5,8 +5,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreatePropertyDto } from '../controller/dto/property.dto';
-import { UpdatePropertyDto } from '../controller/dto/property.dto';
+import {
+  CreatePropertyDto,
+  UpdatePropertyDto,
+} from '../controller/dto/property.dto';
 import { Property } from '../entities/property.entity';
 import { Funding } from '../entities/funding.entity';
 import { ConfigService } from '@nestjs/config';
