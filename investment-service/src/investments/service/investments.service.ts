@@ -70,9 +70,6 @@ export class InvestmentsService {
 
     async investInProperty(userId: string, propertyId: string, amount: number) {
         const remainingBalance = await this.getRemainingInvestmentBalance(propertyId);
-        console.log(amount)
-        console.log(remainingBalance)
-        console.log("hi" + (remainingBalance < amount));
         if (remainingBalance < amount) {
             throw new ConflictException('Insufficient balance in property');
         }
