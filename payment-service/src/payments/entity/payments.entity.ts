@@ -4,9 +4,13 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, Pr
 export class Payment {
   @PrimaryGeneratedColumn()
   stripePaymentId: string;
+
+  @Column()
+  amount: number;
+
+  @Column()
+  id: string;
 }
-
-
 export enum PaymentStatus {
     PENDING = 'pending',
     COMPLETED = 'completed',

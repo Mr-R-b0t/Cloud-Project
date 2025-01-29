@@ -17,9 +17,9 @@ export class PaymentController {
   }
 
 
-  @Post('pay/:id')
+  @Post('recharge/:id')
     createPaymentIntent(@Param('id') id: string,@Body() dto: CreatePaymentDto) {
-    return this.paymentService.createPaymentIntent(id, dto);
+    return this.paymentService.rechargeWallet(id, dto);
   }
 
   @Post('webhooks')
@@ -40,9 +40,9 @@ export class PaymentController {
     }
   }
 
-  @Post('pay-transfer')
-  async transferPayment(@Body() dto: CreateTransferDto){
-    return this.paymentService.paymentTransfer(dto);
+  @Post('withdraw/:id')
+  async transferPayment(@Param('id') id: string,@Body() dto: CreatePaymentDto){
+    return this.paymentService.withrawFromWallet(id, dto);
   }
   
 }
