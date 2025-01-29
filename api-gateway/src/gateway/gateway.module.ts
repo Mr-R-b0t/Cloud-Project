@@ -7,7 +7,7 @@ import {
 import { createProxyMiddleware, fixRequestBody } from 'http-proxy-middleware';
 import { UserRoles } from '../shared/utils/api-enums';
 import { JwtAuthMiddleware } from '../auth/middleware/jwt-auth.middleware';
-import {createRoleMiddleware } from '../auth/middleware/role.guard';
+import {createRoleMiddleware } from '../auth/middleware/role.middleware';
 
 @Module({})
 export class GatewayModule implements NestModule {
