@@ -78,7 +78,6 @@ export class PropertyService {
       throw new ConflictException('Property is not open for funding');
     }
 
-    // Check if funding deadline has passed
     const deadline = new Date(property.fundingDeadline);
     if (deadline < new Date()) {
       // Refund investors and change status back to "open to funding"
@@ -93,9 +92,31 @@ export class PropertyService {
       );
     }
 
+    const totalInvestments = property.fundings.reduce(
+      (sum, funding) => sum + funding.amount,
+      0,
+    );
+    const remainingInvestment = property.price - totalInvestments;
+
+    if (amount > remainingInvestment) {
+      throw new ConflictException(
+        `Investment exceeds required funding. Remaining funding needed: ${remainingInvestment}`,
+      );
+    }
+
     const funding = this.fundingRepository.create({ userId, amount });
     property.fundings.push(await this.fundingRepository.save(funding));
 
     return this.propertyRepository.save(property);
+  }
+
+  async getRemainingInvestment(id: number): Promise<{ remaining: number }> {
+    const property = await this.findOne(id);
+    const totalInvestments = property.fundings.reduce((sum, funding) => {
+      const amount = parseFloat(funding.amount.toString());
+      return sum + amount;
+    }, 0);
+    const remaining = property.price - totalInvestments;
+    return { remaining: remaining > 0 ? remaining : 0 };
   }
 }

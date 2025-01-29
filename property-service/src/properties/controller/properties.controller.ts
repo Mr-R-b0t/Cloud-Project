@@ -27,7 +27,7 @@ export class PropertyController {
     return this.propertyService.findAll();
   }
 
-  @Get('open')
+  @Get('opened')
   async findAllOpenedForFunding() {
     return this.propertyService.findAllOpenedForFunding();
   }
@@ -57,5 +57,10 @@ export class PropertyController {
     @Body('amount') amount: number,
   ) {
     return this.propertyService.fundProperty(id, userId, amount);
+  }
+
+  @Get(':id/remaining')
+  async getRemainingInvestment(@Param('id') id: number) {
+    return this.propertyService.getRemainingInvestment(id);
   }
 }
