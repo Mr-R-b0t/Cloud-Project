@@ -1,4 +1,4 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InvestmentEntity } from '../entity/investments.entity';
 import { Repository } from 'typeorm';
@@ -8,6 +8,7 @@ import axios from 'axios';
 @Injectable()
 export class InvestmentsService {
     private readonly USER_SERVICE_URL = 'http://localhost:3001/users';
+    private readonly PROPERTY_SERVICE_URL = 'http://localhost:3002/properties';
 
     constructor(
         @InjectRepository(InvestmentEntity) private readonly investmentRepository: Repository<InvestmentEntity>,
@@ -41,11 +42,6 @@ export class InvestmentsService {
         return this.investmentRepository.find({ where: { propertyId } });
     }
 
-    async updateInvestment(id: string, updateInvestmentDto: Partial<CreateInvestmentDto>) {
-        await this.investmentRepository.update(id, updateInvestmentDto);
-        return this.findInvestmentById(id);
-    }
-
     async removeInvestment(id: string) {
         const investment = await this.findInvestmentById(id);
         if (investment) {
@@ -67,29 +63,38 @@ export class InvestmentsService {
         return response.data;
     }
 
-    async investInProperty(userId: string, propertyId: string, amount: number) {
+    private async getRemainingInvestmentBalance(propertyId: string): Promise<number> {
+        const response = await axios.get(`${this.PROPERTY_SERVICE_URL}/remaining/${propertyId}`);
+        return response.data;
+    };
 
+    async investInProperty(userId: string, propertyId: string, amount: number) {
+        const remainingBalance = await this.getRemainingInvestmentBalance(propertyId);
+        if (remainingBalance < amount) {
+            throw new ConflictException('Insufficient balance in property');
+        }
         const walletBalance = await this.getWalletBalance(userId);
         if (walletBalance < amount) {
             throw new ConflictException('Insufficient balance in wallet');
         }
 
         await this.updateWalletBalance(userId, -amount);
-
         const investment = this.investmentRepository.create({ userId, propertyId, amount });
+        
+        await axios.post(`${this.PROPERTY_SERVICE_URL}/fund/${propertyId}`, { userId: userId, amount: amount });
+        
         return await this.investmentRepository.save(investment);
     }
 
-    async refundInvestment(userId: string, propertyId: string) {
-
-        const investments = await this.investmentRepository.find({ where: { userId, propertyId } });
+    async refundInvestment(propertyId: string) {
+        const investments = await this.investmentRepository.find({ where: { propertyId } });
         if (!investments.length) {
-            throw new NotFoundException('No investments found for this user and property');
+            throw new NotFoundException('No investments found for this property');
         }
 
-        const totalRefund = investments.reduce((sum, investment) => sum + investment.amount, 0);
-
-        await this.updateWalletBalance(userId, totalRefund);
+        for (const investment of investments) {
+            await this.updateWalletBalance(investment.userId, investment.amount);
+        }
 
         await this.investmentRepository.remove(investments);
     }
