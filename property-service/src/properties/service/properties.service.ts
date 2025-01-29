@@ -81,9 +81,9 @@ export class PropertyService {
     const deadline = new Date(property.fundingDeadline);
     if (deadline < new Date()) {
       // Refund investors and change status back to "open to funding"
-      const walletServiceUrl = this.configService.get<string>('localhost:3003');
+      const refundService = this.configService.get<string>('localhost:3003');
       await this.httpService
-        .post(`${walletServiceUrl}/refund`, { propertyId: id })
+        .post(`${refundService}/refund`, { propertyId: id })
         .toPromise();
       property.status = 'open to funding';
       await this.propertyRepository.save(property);
