@@ -56,9 +56,10 @@ export class InvestmentsService {
     }
 
     private async updateWalletBalance(userId: string, amount: number): Promise<number> {
+        console.log(amount)
         const response = await axios.patch(
             `${this.USER_SERVICE_URL}/wallet/update/${userId}`,
-            { amount }
+            { amount: amount }
         );
         return response.data;
     }
@@ -91,11 +92,11 @@ export class InvestmentsService {
         if (!investments.length) {
             throw new NotFoundException('No investments found for this property');
         }
-
+        
         for (const investment of investments) {
             await this.updateWalletBalance(investment.userId, investment.amount);
         }
-
+        await axios.delete(`${this.PROPERTY_SERVICE_URL}/${parseInt(propertyId)}`);
         await this.investmentRepository.remove(investments);
     }
 
