@@ -17,3 +17,6 @@
 /user-service/.env
 
 /api-gateway/.env
+
+*/dist
+*/env
