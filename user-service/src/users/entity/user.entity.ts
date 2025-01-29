@@ -1,4 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {UserRoles} from "../../shared/utils/api-enums";
+
 
 @Entity()
 export class UserEntity {
@@ -12,12 +14,11 @@ export class UserEntity {
     password: string;
 
     @Column()
-    role: string;
+    role: UserRoles;
 
     @Column()
     firstname: string;
 
     @Column()
     lastname: string;
-
 }
