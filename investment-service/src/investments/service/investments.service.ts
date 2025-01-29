@@ -142,6 +142,14 @@ export class InvestmentsService {
         await this.updateWalletBalance(sellerId, investment.amount);
     
         investment.userId = buyerId;
-        return await this.investmentRepository.save(investment);
+        await this.investmentRepository.save(investment);
+    
+        await axios.patch(`${this.PROPERTY_SERVICE_URL}/funding/update-user`, {
+            propertyId: parseInt(propertyId),
+            userId: sellerId,
+            newUserId: buyerId,
+        });
+    
+        return investment;
     }
 }
