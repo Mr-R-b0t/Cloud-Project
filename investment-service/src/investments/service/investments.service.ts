@@ -120,4 +120,28 @@ export class InvestmentsService {
             await this.updateWalletBalance(investment.userId, totalIncome);
         }
     }
+
+    async sellInvestment(sellerId: string, propertyId: string, buyerId: string) {
+        const investment = await this.investmentRepository.findOne({
+            where: {
+                userId: sellerId,
+                propertyId: propertyId
+            }
+        });
+        
+        if (!investment) {
+            throw new NotFoundException('Investment not found');
+        }
+    
+        const buyerBalance = await this.getWalletBalance(buyerId);
+        if (buyerBalance < investment.amount) {
+            throw new ConflictException('Buyer has insufficient balance');
+        }
+    
+        await this.updateWalletBalance(buyerId, -investment.amount);
+        await this.updateWalletBalance(sellerId, investment.amount);
+    
+        investment.userId = buyerId;
+        return await this.investmentRepository.save(investment);
+    }
 }
