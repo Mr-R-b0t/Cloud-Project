@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Funding } from './funding.entity';
 
 @Entity()
 export class Property {
@@ -19,4 +20,7 @@ export class Property {
 
   @Column()
   fundingDeadline: Date;
+
+  @OneToMany(() => Funding, (funding) => funding.property, { cascade: true })
+  fundings: Funding[];
 }

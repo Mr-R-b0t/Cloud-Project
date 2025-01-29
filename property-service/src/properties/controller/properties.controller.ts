@@ -8,8 +8,10 @@ import {
   Delete,
 } from '@nestjs/common';
 import { PropertyService } from '../service/properties.service';
-import { CreatePropertyDto } from './dto/property.dto';
-import { UpdatePropertyDto } from './dto/property.dto';
+import {
+  CreatePropertyDto,
+  UpdatePropertyDto,
+} from '../controller/dto/property.dto';
 
 @Controller('properties')
 export class PropertyController {
@@ -23,6 +25,11 @@ export class PropertyController {
   @Get()
   async findAll() {
     return this.propertyService.findAll();
+  }
+
+  @Get('opened')
+  async findAllOpenedForFunding() {
+    return this.propertyService.findAllOpenedForFunding();
   }
 
   @Get(':id')
@@ -41,5 +48,19 @@ export class PropertyController {
   @Delete(':id')
   async remove(@Param('id') id: number) {
     return this.propertyService.remove(id);
+  }
+
+  @Post('/fund/:id')
+  async fundProperty(
+    @Param('id') id: number,
+    @Body('userId') userId: string,
+    @Body('amount') amount: number,
+  ) {
+    return this.propertyService.fundProperty(id, userId, amount);
+  }
+
+  @Get('/remaining/:id')
+  async getRemainingInvestment(@Param('id') id: number) {
+    return this.propertyService.getRemainingInvestment(id);
   }
 }
