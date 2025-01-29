@@ -3,7 +3,7 @@ import { PaymentService } from './../service/payments.service';
 import { CreatePaymentDto } from './../controller/dto/create-payment.js';
 import { Stripe } from 'stripe';
 import { ConfigService } from '@nestjs/config';
-import { CreateTransferDto } from './../controller/dto/create-transfer.js';
+
 @Controller('payments')
 export class PaymentController {
   private stripe: Stripe;
