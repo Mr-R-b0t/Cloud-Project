@@ -43,6 +43,14 @@ export class GatewayModule implements NestModule {
       },
     );
 
+    consumer.apply(createProxyMiddleware({
+        target: 'http://localhost:3001/users/create', // User Service
+        changeOrigin: true,
+        on: {
+            proxyReq: fixRequestBody,
+        },
+    }),).forRoutes('/users/create');
+
     consumer
       .apply(
         JwtAuthMiddleware,
