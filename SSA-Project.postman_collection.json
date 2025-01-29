@@ -1,0 +1,932 @@
+{
+	"info": {
+		"_postman_id": "ae53fbca-1492-4e3a-80d1-79eaa190b3f3",
+		"name": "SSA-Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24908887",
+		"_collection_link": "https://orange-flare-250319.postman.co/workspace/Team-Workspace~8133dad4-e531-4053-8fd8-738239069bf2/collection/41623455-ae53fbca-1492-4e3a-80d1-79eaa190b3f3?action=share&source=collection_link&creator=24908887"
+	},
+	"item": [
+		{
+			"name": "User Service",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"testtest23@example.com\",\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\",\n  \"password\": \"password123\",\n  \"role\": \"customer\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User (Me)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4MDkzYmNmMy02YjIyLTQyZmUtOGU3OS1jZDExODVmODZjNTkiLCJlbWFpbCI6InRlc3R0ZXN0MjNAZXhhbXBsZS5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3MzgxNzc1NjMsImV4cCI6MTczODE3ODQ2M30.52fcBdI12oQ3m7_YkbO01Mp_jDdxtw5kUieJ58B33rI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <ACCESS_TOKEN>"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/users/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxZmY5NDM2MS05MmIyLTQzOTItYTdjMi1hZDBhZDAxYzBmNWMiLCJlbWFpbCI6ImZhYmliaWdyb3NiaWJpc2V4eUBleGFtcGxlLmNvbSIsInJvbGUiOiJtYW5hZ2VyIiwiaWF0IjoxNzM4MTc3NjU5LCJleHAiOjE3MzgxNzg1NTl9.yBq5Y0k4pDMwmCUFILQMIY36cefk9Wqnrfuo1-jAJ2w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <ACCESS_TOKEN>"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/users/profile/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"profile",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "8511b6e4-2fe0-4f47-9626-97c7a108cc95"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Current User (Me)",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <ACCESS_TOKEN>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe Updated\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/me/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"me",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxZmY5NDM2MS05MmIyLTQzOTItYTdjMi1hZDBhZDAxYzBmNWMiLCJlbWFpbCI6ImZhYmliaWdyb3NiaWJpc2V4eUBleGFtcGxlLmNvbSIsInJvbGUiOiJtYW5hZ2VyIiwiaWF0IjoxNzM4MTc3NjU5LCJleHAiOjE3MzgxNzg1NTl9.yBq5Y0k4pDMwmCUFILQMIY36cefk9Wqnrfuo1-jAJ2w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <ACCESS_TOKEN>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstname\": \"Jane\",\n  \"lastname\": \"Smith\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/update/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"update",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "8511b6e4-2fe0-4f47-9626-97c7a108cc95"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Wallet Balance (Me)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4MDkzYmNmMy02YjIyLTQyZmUtOGU3OS1jZDExODVmODZjNTkiLCJlbWFpbCI6InRlc3R0ZXN0MjNAZXhhbXBsZS5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3MzgxNzc1NjMsImV4cCI6MTczODE3ODQ2M30.52fcBdI12oQ3m7_YkbO01Mp_jDdxtw5kUieJ58B33rI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <ACCESS_TOKEN>"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/users/wallet/me/balance",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"wallet",
+								"me",
+								"balance"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Wallet Balance by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxZmY5NDM2MS05MmIyLTQzOTItYTdjMi1hZDBhZDAxYzBmNWMiLCJlbWFpbCI6ImZhYmliaWdyb3NiaWJpc2V4eUBleGFtcGxlLmNvbSIsInJvbGUiOiJtYW5hZ2VyIiwiaWF0IjoxNzM4MTc3NjU5LCJleHAiOjE3MzgxNzg1NTl9.yBq5Y0k4pDMwmCUFILQMIY36cefk9Wqnrfuo1-jAJ2w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <ACCESS_TOKEN>"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/users/wallet/balance/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"wallet",
+								"balance",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "8511b6e4-2fe0-4f47-9626-97c7a108cc95"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Wallet Balance by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlYzVlZGZiMi03NDU1LTRjMmQtODgzOC1mM2Q2ZDE4MjA2ZDEiLCJlbWFpbCI6ImFoZWhpaG9odWhAZXhhbXBsZS5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MzgxNzI0NTUsImV4cCI6MTczODE3MzM1NX0.-jdZ7hC6PWsyRlXE-iIWyEWnab07a4McfnoeW55YH0A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <ACCESS_TOKEN>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 100000\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/wallet/update/ec5edfb2-7455-4c2d-8838-f3d6d18206d1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"wallet",
+								"update",
+								"ec5edfb2-7455-4c2d-8838-f3d6d18206d1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Current User (Me)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4MDkzYmNmMy02YjIyLTQyZmUtOGU3OS1jZDExODVmODZjNTkiLCJlbWFpbCI6InRlc3R0ZXN0MjNAZXhhbXBsZS5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3MzgxNzc1NjMsImV4cCI6MTczODE3ODQ2M30.52fcBdI12oQ3m7_YkbO01Mp_jDdxtw5kUieJ58B33rI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <ACCESS_TOKEN>"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/users/me",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJmNDE4YzA2Yy0xYjU1LTQ1NDctOTdhOC02MDYxNzVkMjMxMjAiLCJlbWFpbCI6ImZhYmliaWdyb3NiaWJpc2V4eUBleGFtcGxlLmNvbSIsInJvbGUiOiJtYW5hZ2VyIiwiaWF0IjoxNzM4MTcxNjI2LCJleHAiOjE3MzgxNzI1MjZ9.2ZgOa1w0-fLuXPkRV6_sLjPVfSuTgC8R8eTBGXV-JLE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <ACCESS_TOKEN>"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/users/profile/f418c06c-1b55-4547-97a8-606175d23120",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"profile",
+								"f418c06c-1b55-4547-97a8-606175d23120"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI4NTExYjZlNC0yZmUwLTRmNDctOTYyNi05N2M3YTEwOGNjOTUiLCJlbWFpbCI6InRlc3R1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzM4MTQzNjU0LCJleHAiOjE3MzgxNDQ1NTR9.SZmmj4059AFhsPhsJJDafr_UmIgMxYxE9v3is2CvHQ4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <ACCESS_TOKEN>"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/users/retrieve/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"retrieve",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Role",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlYzVlZGZiMi03NDU1LTRjMmQtODgzOC1mM2Q2ZDE4MjA2ZDEiLCJlbWFpbCI6ImFoZWhpaG9odWhAZXhhbXBsZS5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3MzgxNzI2NzEsImV4cCI6MTczODE3MzU3MX0.mSKBVDwgbBIUmnHAkjfx2E-u7M2ccKt3AQbgXBc6cNY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer <ACCESS_TOKEN>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"role\": \"customer\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/role/update/ec5edfb2-7455-4c2d-8838-f3d6d18206d1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"role",
+								"update",
+								"ec5edfb2-7455-4c2d-8838-f3d6d18206d1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"testuser@example.com@example.com\",\r\n    \"password\" : \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"fabibigrosbibisexy@example.com\",\r\n    \"password\" : \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"fabibigrosbibisexy@example.com\",\r\n    \"password\" : \"password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/auth/refresh",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PaymentService",
+			"item": [
+				{
+					"name": "Recharge user Wallet",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"amount\": 10000,\r\n    \"paymentMethod\": \"card\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3004/payments/recharge/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"payments",
+								"recharge",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "b3c2c655-8cae-4b2d-be92-1f21d44e47c8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Withdraw user Wallet",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 10000,\r\n  \"paymentMethod\": \"card\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3004/payments/withdraw/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"payments",
+								"withdraw",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "8511b6e4-2fe0-4f47-9626-97c7a108cc95"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PropertyService",
+			"item": [
+				{
+					"name": "Create Properties",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Properties",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get 6 properties ",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get Properties by ID",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get all properties",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "InvestmentsService",
+			"item": [
+				{
+					"name": "Get All investments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1Yjk5ZmNlYy1kMWIyLTQzOTEtODNmZC1lNDljY2QwYjA2YzAiLCJlbWFpbCI6InZhbEBjdXN0b21lci5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3MzgxODM0OTAsImV4cCI6MTczODE4NDM5MH0.Ue9-tqsuINGk1u_d3Hj6obh7cZmjgjU655asrA2BZSg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/investments/get/all",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investments",
+								"get",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Investment By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/investments/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investments",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by UserId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/investments/user/:userId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investments",
+								"user",
+								":userId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by PropertyId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/investments/property/:propertyId",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investments",
+								"property",
+								":propertyId"
+							],
+							"variable": [
+								{
+									"key": "propertyId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invest in Propriety",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"9b335b9e-e79c-4f40-b34a-d06164cbe5b3\",\r\n    \"propertyId\": \"18\",\r\n    \"amount\": \"30000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/investments/invest",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investments",
+								"invest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Distribute Income",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"propertyId\":18\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/investments/distribute-income",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investments",
+								"distribute-income"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refund",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"propertyId\": \"18\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/investments/refund",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investments",
+								"refund"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

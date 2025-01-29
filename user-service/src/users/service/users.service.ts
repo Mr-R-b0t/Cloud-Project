@@ -7,6 +7,7 @@ import { WalletEntity } from '../entity/wallet.entity';
 import { WalletUpdateDto } from '../controller/dto/walletUpdate.dto';
 import { CustomerUpdateDTO } from '../controller/dto/user.customer.update';
 import * as bcrypt from 'bcrypt';
+import {UserRoles} from "../../shared/utils/api-enums";
 
 @Injectable()
 export class UsersService {
@@ -88,8 +89,7 @@ export class UsersService {
         if (!wallet) {
             throw new Error(`Wallet for user with ID ${id} not found`);
         }
-
-        wallet.balance += walletUpdate.amount;
+        wallet.balance += parseInt((walletUpdate.amount).toString());
         await this.walletRepo.save(wallet);
 
         return wallet.balance;
@@ -151,7 +151,7 @@ export class UsersService {
     /**
      * Update a user's role (admin feature).
      */
-    async updateUserRole(id: string, role: string): Promise<UserDto> {
+    async updateUserRole(id: string, role: UserRoles): Promise<UserDto> {
         const user = await this.userRepo.findOne({ where: { id } });
         if (!user) {
             throw new Error(`User with ID ${id} not found`);
