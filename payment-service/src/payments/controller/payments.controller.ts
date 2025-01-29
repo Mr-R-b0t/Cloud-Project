@@ -16,33 +16,22 @@ export class PaymentController {
     });
   }
 
-
+  // Recharge wallet
   @Post('recharge/:id')
-    createPaymentIntent(@Param('id') id: string,@Body() dto: CreatePaymentDto) {
-    return this.paymentService.rechargeWallet(id, dto);
+    async createPaymentIntent(@Param('id') id: string,@Body() dto: CreatePaymentDto) {
+    return await this.paymentService.rechargeWallet(id, dto);
   }
-
+  // Handle webhook for stripe
   @Post('webhooks')
-  async handleWebhook(
-    @Req() request: RawBodyRequest<Request>,
-    @Headers('stripe-signature') signature: string,
-  ) {
-    try {
-      const event = this.stripe.webhooks.constructEvent(
-        request.rawBody,
-        signature,
-        this.configService.get('STRIPE_WEBHOOK')
-      );
+  async handleWebhook(@Req() request: RawBodyRequest<Request>, @Headers('stripe-signature') signature: string,) {
+      const event = this.stripe.webhooks.constructEvent(request.rawBody,signature,this.configService.get('STRIPE_WEBHOOK'));
       return this.paymentService.handlePaymentWebhook(event);
-    } catch (err) {
-      console.log("Error", err);
-      throw new HttpException(err.message, 400);
-    }
   }
 
+  // Withdraw from wallet
   @Post('withdraw/:id')
   async transferPayment(@Param('id') id: string,@Body() dto: CreatePaymentDto){
-    return this.paymentService.withrawFromWallet(id, dto);
+    return await this.paymentService.withrawFromWallet(id, dto);
   }
   
 }

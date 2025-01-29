@@ -3,7 +3,7 @@ import { CreatePaymentDto } from './../controller/dto/create-payment.js';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 import axios from "axios"
-import { CreateTransferDto } from '../controller/dto/create-transfer.js';
+
 interface Payment {
   id: string;
   stripePaymentId: string;
@@ -19,24 +19,24 @@ export class PaymentService {
   private payments: Map<string, Payment> = new Map();
 
   constructor(private configService: ConfigService) {
-    this.stripe = new Stripe(this.configService.get('STRIPE_SECRET'), {
-      apiVersion: '2024-12-18.acacia',
-    });
+    // Initialize Stripe with secret key from config
+    this.stripe = new Stripe(this.configService.get('STRIPE_SECRET'), {apiVersion: '2024-12-18.acacia',});
   }
 
+  //Method to recharge wallet
   async rechargeWallet(userId: string, dto: CreatePaymentDto) {
     const paymentMethod = dto.paymentMethod || this.DEFAULT_PAYMENT_METHOD;
     const senderResponse = await axios.get(`http://localhost:3001/users/wallet/balance/${userId}`);
     const userBalance = senderResponse.data;
     if (userBalance < dto.amount) {
+      // Insufficient funds
       throw new HttpException('Insufficient funds', HttpStatus.BAD_REQUEST);
     }
     if (!dto.paymentMethod) {
       throw new HttpException('Payment method is required', HttpStatus.BAD_REQUEST);
     }
 
-    
-    console.log("dtoamout", dto.amount)
+    // Create a payment intent with Stripe
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: Math.round(dto.amount * 100),
       currency: 'eur',
@@ -46,6 +46,7 @@ export class PaymentService {
       metadata: { userId },
     });
 
+    // Create a payment object
     const payment: Payment = {
       id: crypto.randomUUID(),
       stripePaymentId: paymentIntent.id,
@@ -89,15 +90,15 @@ export class PaymentService {
         };
         console.log("The wallet has been recharged successfully")
         await this.handlePaymentWebhook(mockStripeEvent);
-        return payment.status;
+        return 'The wallet has been recharged successfully. Email send.';
       } catch (error) {
         console.error("ERROR HERE", error)
         payment.status = 'failed';
         const mockStripeEvent: Stripe.Event = {
           id: 'evt_' + crypto.randomUUID(),
-          type: 'payment_intent.payment_failed', // Trigger a failed payment event
+          type: 'payment_intent.payment_failed', 
           data: {
-            object: paymentIntent, // Include the payment intent data
+            object: paymentIntent, 
           },
           api_version: '2024-12-18.acacia',
           created: Math.floor(Date.now() / 1000),
@@ -111,11 +112,11 @@ export class PaymentService {
         };
 
         await this.handlePaymentWebhook(mockStripeEvent);
-        return payment.status;
+        return 'The wallet has been recharged failed. Email sent.';
       }
     } 
   }
-
+  // Handle Stripe webhook events
   async handlePaymentWebhook(event: Stripe.Event) {
     const { type, data } = event;
     console.log("Event type : ", event.type);
@@ -129,9 +130,10 @@ export class PaymentService {
         break;
     }
   }
-
+  // Send email notification for successful payment
   private async handleSuccessfulPayment(paymentIntent: Stripe.PaymentIntent) {
     try {
+      console.log("id transaction", paymentIntent.id);
         const response = await axios.post(
         `http://localhost:3005/notifications/sendMail`, 
         {
@@ -145,21 +147,21 @@ export class PaymentService {
           },
         }
       );
-      console.log('Email sent successfully:', response.data);
-      return response.data;
+      console.log('Email sent successfully');
+      return 'Email sent successfully';
     } catch (error) {
       console.error('Error sending email:', error.response?.data || error.message);
       throw new Error('Failed to send email');
     }
-    
-    
-    
   }
 
+
+  // Send email notification for failed payment
   private async handleFailedPayment(paymentIntent: Stripe.PaymentIntent) {
     try{
 
     const payment = this.payments.get(paymentIntent.id);
+    
     const response = await axios.post(
       `http://localhost:3005/notifications/sendMail`, 
       {
@@ -174,20 +176,18 @@ export class PaymentService {
       }
     );
     console.log('Email sent successfully:', response.data);
-    if (!payment) return;
-    payment.status = 'failed';
-    return response.data;
+    
+    return 'Email sent successfully!';
   } catch (error) {
     console.error('Error sending email:', error.response?.data || error.message);
     throw new Error('Failed to send email');
   }
-    
-  }
+}
 
-
+  // Method to withdraw from wallet
   async withrawFromWallet(userId: string, dto: CreatePaymentDto) {
     const paymentMethod = dto.paymentMethod || this.DEFAULT_PAYMENT_METHOD;
-    const senderResponse = await axios.get(`http://localhost:3001/users/wallet/balance/${userId}`);
+    const senderResponse = await axios.get(`http://localhost:3001/users/wallet/balance/${userId}`); // get user balance
     const userBalance = senderResponse.data;
     if (userBalance < dto.amount) {
       throw new HttpException('Insufficient funds', HttpStatus.BAD_REQUEST);
@@ -195,6 +195,8 @@ export class PaymentService {
     if (!dto.paymentMethod) {
       throw new HttpException('Payment method is required', HttpStatus.BAD_REQUEST);
     }
+
+    // Create a payment intent with Stripe
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: Math.round(dto.amount * 100),
       currency: 'eur',
@@ -203,7 +205,7 @@ export class PaymentService {
       payment_method_types: ['card'],
       metadata: { userId },
     });
-
+    // Create a payment object
     const payment: Payment = {
       id: crypto.randomUUID(),
       stripePaymentId: paymentIntent.id,
@@ -212,7 +214,7 @@ export class PaymentService {
       status: 'pending'
     };
 
-    
+    // Handle payment success
     this.payments.set(payment.stripePaymentId, payment);
     if (paymentIntent.status === 'succeeded') {
       try {
@@ -227,7 +229,7 @@ export class PaymentService {
         );
         
         payment.status = response.status === 200 ? 'completed' : 'failed';
-        
+        // Mock Stripe event for successful payment
         const mockStripeEvent: Stripe.Event = {
           id: 'evt_' + crypto.randomUUID(),
           type: 'payment_intent.succeeded', 
@@ -246,15 +248,15 @@ export class PaymentService {
         };
         console.log("Your withdraw is completed !")
         await this.handlePaymentWebhook(mockStripeEvent);
-        return payment.status;
+        return 'Your withdraw is completed. Email sent successfully!';
       } catch (error) {
         console.error("ERROR HERE", error)
         payment.status = 'failed';
         const mockStripeEvent: Stripe.Event = {
           id: 'evt_' + crypto.randomUUID(),
-          type: 'payment_intent.payment_failed', // Trigger a failed payment event
+          type: 'payment_intent.payment_failed', 
           data: {
-            object: paymentIntent, // Include the payment intent data
+            object: paymentIntent, 
           },
           api_version: '2024-12-18.acacia',
           created: Math.floor(Date.now() / 1000),
@@ -268,7 +270,7 @@ export class PaymentService {
         };
 
         await this.handlePaymentWebhook(mockStripeEvent);
-        return payment.status;
+        return 'Your withdraw is failed. Email sent.';
       }
     } 
   }
