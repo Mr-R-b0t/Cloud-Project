@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Patch, Delete, Body, Post } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Body, Post } from '@nestjs/common';
 import { InvestmentsService } from '../service/investments.service';
 import { CreateInvestmentDto } from './dto/create-investement.dto';
 
@@ -33,13 +33,10 @@ export class InvestmentsController {
         return this.investmentsService.findInvestmentsByPropertyId(propertyId);
     }
 
-    @Patch(':id')
-    async updateInvestment(@Param('id') id: string, @Body() updateInvestmentDto: Partial<CreateInvestmentDto>) {
-        return this.investmentsService.updateInvestment(id, updateInvestmentDto);
-    }
-
     @Delete(':id')
     async removeInvestment(@Param('id') id: string) {
         return this.investmentsService.removeInvestment(id);
     }
+
+    
 }
