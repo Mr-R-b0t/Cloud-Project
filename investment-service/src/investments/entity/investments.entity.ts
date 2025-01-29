@@ -17,7 +17,4 @@ export class InvestmentEntity {
 
     @CreateDateColumn()
     createdAt: Date;
-
-    @CreateDateColumn()
-    updatedAt: Date;
 }
