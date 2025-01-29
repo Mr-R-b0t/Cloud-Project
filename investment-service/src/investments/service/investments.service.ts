@@ -65,16 +65,19 @@ export class InvestmentsService {
 
     private async getRemainingInvestmentBalance(propertyId: string): Promise<number> {
         const response = await axios.get(`${this.PROPERTY_SERVICE_URL}/remaining/${propertyId}`);
-        return response.data;
+        return response.data.remaining;
     };
 
     async investInProperty(userId: string, propertyId: string, amount: number) {
         const remainingBalance = await this.getRemainingInvestmentBalance(propertyId);
+        console.log(amount)
+        console.log(remainingBalance)
+        console.log("hi" + (remainingBalance < amount));
         if (remainingBalance < amount) {
             throw new ConflictException('Insufficient balance in property');
         }
         const walletBalance = await this.getWalletBalance(userId);
-        if (walletBalance < amount) {
+        if (walletBalance < amount ) {
             throw new ConflictException('Insufficient balance in wallet');
         }
 
