@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Delete,
+  NotFoundException,
 } from '@nestjs/common';
 import { PropertyService } from '../service/properties.service';
 import {
@@ -62,5 +63,24 @@ export class PropertyController {
   @Get('/remaining/:id')
   async getRemainingInvestment(@Param('id') id: number) {
     return this.propertyService.getRemainingInvestment(id);
+  }
+
+  @Patch('/funding/update-user')
+  async updateFundingUser(
+    @Body() body: { propertyId: number; userId: string; newUserId: string },
+  ) {
+    const { propertyId, userId, newUserId } = body;
+
+    if (!propertyId || !userId || !newUserId) {
+      throw new NotFoundException(
+        'propertyId, userId, and newUserId must be provided',
+      );
+    }
+
+    return this.propertyService.updateFundingUser(
+      propertyId,
+      userId,
+      newUserId,
+    );
   }
 }

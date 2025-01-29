@@ -119,4 +119,30 @@ export class PropertyService {
     const remaining = property.price - totalInvestments;
     return { remaining: remaining > 0 ? remaining : 0 };
   }
+
+  async updateFundingUser(
+    propertyId: number,
+    userId: string,
+    newUserId: string,
+  ): Promise<Funding> {
+    const property = await this.propertyRepository.findOne({
+      where: { id: propertyId },
+      relations: ['fundings'],
+    });
+
+    if (!property) {
+      throw new NotFoundException(`Property with ID ${propertyId} not found`);
+    }
+
+    const funding = property.fundings.find((f) => f.userId === userId);
+
+    if (!funding) {
+      throw new NotFoundException(
+        `Funding for user ID ${userId} in property ID ${propertyId} not found`,
+      );
+    }
+
+    funding.userId = newUserId;
+    return this.fundingRepository.save(funding);
+  }
 }
