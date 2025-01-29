@@ -1,10 +1,12 @@
-import { Controller, Get, Param, Patch, Delete, Body, Post } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Body, Post } from '@nestjs/common';
 import { InvestmentsService } from '../service/investments.service';
 import { CreateInvestmentDto } from './dto/create-investement.dto';
 
 @Controller('investments')
 export class InvestmentsController {
-    constructor(private readonly investmentsService: InvestmentsService) {}
+    constructor(
+        private readonly investmentsService: InvestmentsService,
+    ) {}
 
     @Post('create')
     async create(@Body() createInvestmentDto: CreateInvestmentDto) {
@@ -31,13 +33,33 @@ export class InvestmentsController {
         return this.investmentsService.findInvestmentsByPropertyId(propertyId);
     }
 
-    @Patch(':id')
-    async updateInvestment(@Param('id') id: string, @Body() updateInvestmentDto: Partial<CreateInvestmentDto>) {
-        return this.investmentsService.updateInvestment(id, updateInvestmentDto);
-    }
-
     @Delete(':id')
     async removeInvestment(@Param('id') id: string) {
         return this.investmentsService.removeInvestment(id);
     }
+
+    @Post('invest')
+    async investInProperty(
+        @Body('userId') userId: string,
+        @Body('propertyId') propertyId: string,
+        @Body('amount') amount: number,
+    ) {
+        return this.investmentsService.investInProperty(userId, propertyId, amount);
+    }
+
+    @Post('refund')
+    async refundInvestment(
+        @Body('propertyId') propertyId: string,
+    ) {
+        return this.investmentsService.refundInvestment(propertyId);
+    }
+
+    @Post('distribute-income')
+    async distributeRentalIncome(
+        @Body('propertyId') propertyId: string,
+    ) {
+        return this.investmentsService.distributeRentalIncome(propertyId);
+    }  
+
+    
 }

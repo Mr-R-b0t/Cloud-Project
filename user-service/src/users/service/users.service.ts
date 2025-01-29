@@ -89,8 +89,7 @@ export class UsersService {
         if (!wallet) {
             throw new Error(`Wallet for user with ID ${id} not found`);
         }
-
-        wallet.balance += walletUpdate.amount;
+        wallet.balance += parseInt((walletUpdate.amount).toString());
         await this.walletRepo.save(wallet);
 
         return wallet.balance;

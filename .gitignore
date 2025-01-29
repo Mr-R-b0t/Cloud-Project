@@ -15,4 +15,4 @@
 /user-service/dist/
 
 */dist
-*/env
+*/.env
