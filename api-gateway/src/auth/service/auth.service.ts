@@ -1,4 +1,4 @@
-import {Injectable, Logger, UnauthorizedException} from '@nestjs/common';
+import {Injectable, Logger, NotFoundException, UnauthorizedException} from '@nestjs/common';
 import {JwtService} from '@nestjs/jwt';
 import {RefreshTokenEntity} from "../entity/refresh-token.entity";
 import * as bcrypt from 'bcrypt';
@@ -26,6 +26,11 @@ export class AuthService {
     async login(loginDto: LoginDto) {
 
         const user = await this.userRepository.findOne({ where: { email: loginDto.email}});
+        if (!user) {
+            throw new NotFoundException(`User with email ${loginDto.email} not found`);
+        }
+
+        this.LOGGER.log(user.password);
 
         if (!(await bcrypt.compare(loginDto.password, user.password))) {
             throw new UnauthorizedException();
