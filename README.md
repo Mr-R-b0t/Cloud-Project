@@ -40,5 +40,5 @@ This project involves designing and implementing a fractional property ownership
 3. **Access the API Gateway at `http://localhost:3000`.**
 
 ### Postman Collection:
-- [PostMan Collection](diagram.png)
+- [PostMan Collection](SSA-Project.postman_collection.json)
 
