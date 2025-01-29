@@ -4,7 +4,9 @@ import { CreateInvestmentDto } from './dto/create-investement.dto';
 
 @Controller('investments')
 export class InvestmentsController {
-    constructor(private readonly investmentsService: InvestmentsService) {}
+    constructor(
+        private readonly investmentsService: InvestmentsService,
+    ) {}
 
     @Post('create')
     async create(@Body() createInvestmentDto: CreateInvestmentDto) {
