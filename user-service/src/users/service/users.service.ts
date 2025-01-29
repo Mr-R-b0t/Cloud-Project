@@ -6,6 +6,7 @@ import { UserDto } from '../controller/dto/user.dto';
 import { WalletEntity } from '../entity/wallet.entity';
 import { WalletUpdateDto } from '../controller/dto/walletUpdate.dto';
 import { CustomerUpdateDTO } from '../controller/dto/user.customer.update';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -34,6 +35,10 @@ export class UsersService {
      */
     async createUser(user: UserEntity): Promise<UserDto> {
         this.LOGGER.log(`Creating user with email: ${user.email}`);
+
+        const salt = await bcrypt.genSalt();
+        user.password = await bcrypt.hash(user.password, salt);
+
         const createdUser = await this.userRepo.save(user);
 
         const wallet = new WalletEntity();
