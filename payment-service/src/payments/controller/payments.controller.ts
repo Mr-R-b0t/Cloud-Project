@@ -22,7 +22,7 @@ export class PaymentController {
   @Post('pay')
   //createPaymentIntent(@Req() req, @Body() dto: CreatePaymentDto) {
     createPaymentIntent(@Body() dto: CreatePaymentDto) {
-      const userId = "3667fed3-e83b-4e7c-bd21-8c3f0d666ce3"
+      const userId = "8511b6e4-2fe0-4f47-9626-97c7a108cc95"
   return this.paymentService.createPaymentIntent(userId, dto);
   }
 

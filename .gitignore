@@ -1,7 +1,7 @@
 /.idea/
 /api-gateway/node_modules/
 /api-gateway/dist/
-
+/api-gateway/.env
 /investment-service/node_modules/
 /notification-service/node_modules/
 /payment-service/node_modules/
@@ -11,6 +11,8 @@
 /property-service/node_modules/
 /user-service/node_modules/
 /user-service/dist/
+/user-service/.env
+
 /api-gateway/.env
 */dist
 */env
