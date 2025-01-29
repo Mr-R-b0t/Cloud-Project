@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Property } from './property.entity';
 
 @Entity()
 export class Funding {
@@ -8,6 +9,11 @@ export class Funding {
   @Column()
   userId: string;
 
-  @Column()
+  @Column('decimal', { precision: 12, scale: 2 })
   amount: number;
+
+  @ManyToOne(() => Property, (property) => property.fundings, {
+    onDelete: 'CASCADE',
+  })
+  property: Property;
 }

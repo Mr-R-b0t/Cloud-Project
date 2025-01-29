@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Property = void 0;
 const typeorm_1 = require("typeorm");
+const funding_entity_1 = require("./funding.entity");
 let Property = class Property {
 };
 exports.Property = Property;
@@ -38,6 +39,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Date)
 ], Property.prototype, "fundingDeadline", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => funding_entity_1.Funding, (funding) => funding.property, { cascade: true }),
+    __metadata("design:type", Array)
+], Property.prototype, "fundings", void 0);
 exports.Property = Property = __decorate([
     (0, typeorm_1.Entity)()
 ], Property);
