@@ -50,7 +50,7 @@ export class PropertyController {
     return this.propertyService.remove(id);
   }
 
-  @Post(':id/fund')
+  @Post('/fund/:id')
   async fundProperty(
     @Param('id') id: number,
     @Body('userId') userId: string,
@@ -59,7 +59,7 @@ export class PropertyController {
     return this.propertyService.fundProperty(id, userId, amount);
   }
 
-  @Get(':id/remaining')
+  @Get('/remaining/:id')
   async getRemainingInvestment(@Param('id') id: number) {
     return this.propertyService.getRemainingInvestment(id);
   }
