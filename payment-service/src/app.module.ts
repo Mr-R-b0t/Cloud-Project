@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PaymentsModule } from './payments/payments.module';
-import { PaymentsController } from './payments/payments.controller';
-import { PaymentsService } from './payments/payments.service';
-
+import { PaymentModule } from './payments/payments.module';
+import { DatabaseModule } from './shared/database/database.module';
+import { ConfigModule } from '@nestjs/config';
 @Module({
-  imports: [PaymentsModule],
-  controllers: [AppController, PaymentsController],
-  providers: [AppService, PaymentsService],
+  imports: [
+    DatabaseModule,
+    ConfigModule.forRoot(),
+    PaymentModule
+  ],
+  controllers: [  ],
+  providers: [  ],
 })
 export class AppModule {}
