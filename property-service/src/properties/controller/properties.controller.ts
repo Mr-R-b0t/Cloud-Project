@@ -1,99 +1,59 @@
 import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-  HttpService,
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Patch,
+  Delete,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { PropertyService } from '../service/properties.service';
 import { CreatePropertyDto } from '../controller/dto/property.dto';
 import { UpdatePropertyDto } from '../controller/dto/property.dto';
-import { Property } from '../entities/property.entity';
-import { Funding } from '../entities/funding.entity';
-import { ConfigService } from '@nestjs/config';
 
-@Injectable()
-export class PropertyService {
-  constructor(
-    @InjectRepository(Property)
-    private readonly propertyRepository: Repository<Property>,
-    @InjectRepository(Funding)
-    private readonly fundingRepository: Repository<Funding>,
-    private readonly httpService: HttpService,
-    private readonly configService: ConfigService,
-  ) {}
+@Controller('properties')
+export class PropertyController {
+  constructor(private readonly propertyService: PropertyService) {}
 
-  async create(createPropertyDto: CreatePropertyDto): Promise<Property> {
-    const property = this.propertyRepository.create({
-      ...createPropertyDto,
-      fundingDeadline: new Date(new Date().setMonth(new Date().getMonth() + 2)),
-      fundings: [],
-    });
-    return this.propertyRepository.save(property);
+  @Post()
+  async create(@Body() createPropertyDto: CreatePropertyDto) {
+    return this.propertyService.create(createPropertyDto);
   }
 
-  async findAll(): Promise<Property[]> {
-    return this.propertyRepository.find({ relations: ['fundings'] });
+  @Get()
+  async findAll() {
+    return this.propertyService.findAll();
   }
 
-  async findAllOpenedForFunding(): Promise<Property[]> {
-    return this.propertyRepository.find({
-      where: { status: 'funding' },
-      take: 6,
-      relations: ['fundings'],
-    });
+  @Get('open')
+  async findAllOpenedForFunding() {
+    return this.propertyService.findAllOpenedForFunding();
   }
 
-  async findOne(id: number): Promise<Property> {
-    const property = await this.propertyRepository.findOne({
-      where: { id },
-      relations: ['fundings'],
-    });
-    if (!property) {
-      throw new NotFoundException(`Property with ID ${id} not found`);
-    }
-    return property;
+  @Get(':id')
+  async findOne(@Param('id') id: number) {
+    return this.propertyService.findOne(id);
   }
 
+  @Patch(':id')
   async update(
-    id: number,
-    updatePropertyDto: UpdatePropertyDto,
-  ): Promise<Property> {
-    const property = await this.findOne(id);
-    const updatedProperty = { ...property, ...updatePropertyDto };
-    return this.propertyRepository.save(updatedProperty);
+    @Param('id') id: number,
+    @Body() updatePropertyDto: UpdatePropertyDto,
+  ) {
+    return this.propertyService.update(id, updatePropertyDto);
   }
 
-  async remove(id: number): Promise<void> {
-    const property = await this.findOne(id);
-    await this.propertyRepository.remove(property);
+  @Delete(':id')
+  async remove(@Param('id') id: number) {
+    return this.propertyService.remove(id);
   }
 
-  async fundProperty(id: number, userId: string, amount: number): Promise<any> {
-    const property = await this.findOne(id);
-
-    if (property.status !== 'funding') {
-      throw new ConflictException('Property is not open for funding');
-    }
-
-    // Check if funding deadline has passed
-    const deadline = new Date(property.fundingDeadline);
-    if (deadline < new Date()) {
-      // Refund investors and change status back to "open to funding"
-      const walletServiceUrl = this.configService.get<string>('localhost:3003');
-      await this.httpService
-        .post(`${walletServiceUrl}/refund`, { propertyId: id })
-        .toPromise();
-      property.status = 'open to funding';
-      await this.propertyRepository.save(property);
-      throw new ConflictException(
-        'Funding deadline has passed, investors have been refunded',
-      );
-    }
-
-    const funding = this.fundingRepository.create({ userId, amount });
-    property.fundings.push(await this.fundingRepository.save(funding));
-
-    return this.propertyRepository.save(property);
+  @Post(':id/fund')
+  async fundProperty(
+    @Param('id') id: number,
+    @Body('userId') userId: string,
+    @Body('amount') amount: number,
+  ) {
+    return this.propertyService.fundProperty(id, userId, amount);
   }
 }

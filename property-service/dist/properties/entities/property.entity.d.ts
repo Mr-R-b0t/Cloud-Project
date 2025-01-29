@@ -1,3 +1,4 @@
+import { Funding } from './funding.entity';
 export declare class Property {
     id: number;
     name: string;
@@ -5,4 +6,5 @@ export declare class Property {
     price: number;
     status: string;
     fundingDeadline: Date;
+    fundings: Funding[];
 }
