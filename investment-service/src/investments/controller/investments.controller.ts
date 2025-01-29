@@ -38,5 +38,28 @@ export class InvestmentsController {
         return this.investmentsService.removeInvestment(id);
     }
 
+    @Post('invest')
+    async investInProperty(
+        @Body('userId') userId: string,
+        @Body('propertyId') propertyId: string,
+        @Body('amount') amount: number,
+    ) {
+        return this.investmentsService.investInProperty(userId, propertyId, amount);
+    }
+
+    @Post('refund')
+    async refundInvestment(
+        @Body('propertyId') propertyId: string,
+    ) {
+        return this.investmentsService.refundInvestment(propertyId);
+    }
+
+    @Post('distribute-income')
+    async distributeRentalIncome(
+        @Body('propertyId') propertyId: string,
+    ) {
+        return this.investmentsService.distributeRentalIncome(propertyId);
+    }  
+
     
 }

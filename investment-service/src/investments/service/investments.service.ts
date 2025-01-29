@@ -99,15 +99,24 @@ export class InvestmentsService {
         await this.investmentRepository.remove(investments);
     }
 
-    async distributeRentalIncome(propertyId: string, incomeAmount: number) {
+    async distributeRentalIncome(propertyId: string) {
         const investments = await this.investmentRepository.find({ where: { propertyId } });
         if (!investments.length) {
             throw new NotFoundException('No investments found for this property');
         }
 
+        const propertyDetails = await axios.get(`${this.PROPERTY_SERVICE_URL}/${propertyId}`);
+        const propertyValue = propertyDetails.data.price;
+        const annualRentalRate = 0.06; // 6% annual rental income
+        const annualAppreciationRate = 0.02; // 2% annual appreciation
+
         for (const investment of investments) {
-            const userIncome = (investment.amount / incomeAmount) * incomeAmount;
-            await this.updateWalletBalance(investment.userId, userIncome);
+            const sharePercentage = investment.amount / propertyValue;
+            const rentalIncome = propertyValue * sharePercentage * annualRentalRate;
+            const appreciationIncome = propertyValue * sharePercentage * annualAppreciationRate;
+            const totalIncome = rentalIncome + appreciationIncome;
+
+            await this.updateWalletBalance(investment.userId, totalIncome);
         }
     }
 }
