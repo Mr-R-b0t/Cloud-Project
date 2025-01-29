@@ -1,13 +1,10 @@
 import { Controller, Get, Param, Patch, Delete, Body, Post } from '@nestjs/common';
 import { InvestmentsService } from '../service/investments.service';
 import { CreateInvestmentDto } from './dto/create-investement.dto';
-import { WalletService } from '../service/wallet.service'; // Assuming a WalletService exists for wallet operations
-
 @Controller('investments')
 export class InvestmentsController {
     constructor(
         private readonly investmentsService: InvestmentsService,
-        private readonly walletService: WalletService, // Inject WalletService
     ) {}
 
     @Post('create')
