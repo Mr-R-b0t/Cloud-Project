@@ -7,4 +7,4 @@
 /user-service/node_modules/
 /api-gateway/.env
 */dist
-*/env
+*/.env
