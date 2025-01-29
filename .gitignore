@@ -4,6 +4,8 @@
 /api-gateway/.env
 /investment-service/node_modules/
 /notification-service/node_modules/
+/notification-service/dist/
+/notification-service/.env
 /payment-service/node_modules/
 /payment-service/.env
 /payment-service/dist/
@@ -11,6 +13,7 @@
 /property-service/node_modules/
 /user-service/node_modules/
 /user-service/dist/
+/user-service/.env
 /user-service/.env
 
 /api-gateway/.env
