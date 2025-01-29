@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { PrimaryGeneratedColumn } from 'typeorm';
 
 export class CreateMailDto {
