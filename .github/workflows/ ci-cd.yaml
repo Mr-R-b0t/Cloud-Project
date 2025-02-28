@@ -1,0 +1,54 @@
+name: Build and Push to Harbor
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+env:
+  HARBOR_REGISTRY: harbor.toxicsed.com
+  PROJECT_NAME: cloud
+  APP_VERSION: ${GITHUB_SHA:0:8}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          [
+            "api-gateway",
+            "investment-service",
+            "notification-service",
+            "payment-service",
+            "property-service",
+            "user-service",
+          ]
+      fail-fast: false
+      max-parallel: 3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Harbor
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.HARBOR_REGISTRY }}
+          username: ${{ secrets.HARBOR_USER }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./${{ matrix.service }}
+          push: true
+          tags: |
+            ${{ env.HARBOR_REGISTRY }}/${{ env.PROJECT_NAME }}/${{ matrix.service }}:${{ env.APP_VERSION }}
+            ${{ env.HARBOR_REGISTRY }}/${{ env.PROJECT_NAME }}/${{ matrix.service }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 COPY package.json .
 COPY yarn.lock .
 
-RUN yarn install --frozen-lockfile
+RUN yarn install 
 
 # Copy source files
 COPY . .
@@ -23,7 +23,7 @@ WORKDIR /usr/src/app
 
 COPY package.json yarn.lock .env* ./
 
-RUN yarn install --frozen-lockfile --production
+RUN yarn install  --production
 
 # Copy the built assets of the api app
 COPY --from=build /usr/src/app/dist /usr/src/app/dist
