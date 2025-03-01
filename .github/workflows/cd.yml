@@ -34,10 +34,10 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: push to ghrc
-        run: docker push ghcr.io/glyps/mr-r-b0t/cloud-project:investment-service && 
-          docker push ghcr.io/glyps/mr-r-b0t/cloud-project:notification-service && 
-          docker push ghcr.io/glyps/mr-r-b0t/cloud-project:payment-service && 
-          docker push ghcr.io/glyps/mr-r-b0t/cloud-project:property-service && 
-          docker push ghcr.io/glyps/mr-r-b0t/cloud-project:user-service
+        run: docker push ghcr.io/mr-r-b0t/cloud-project:investment-service && 
+          docker push ghcr.io/mr-r-b0t/cloud-project:notification-service && 
+          docker push ghcr.io/mr-r-b0t/cloud-project:payment-service && 
+          docker push ghcr.io/mr-r-b0t/cloud-project:property-service && 
+          docker push ghcr.io/mr-r-b0t/cloud-project:user-service
 
 
