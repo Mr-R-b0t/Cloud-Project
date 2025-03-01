@@ -16,13 +16,13 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: build investement service
-        run: docker build -t ghcr.io/glyps/mr-r-b0t/cloud-project:investment-service ./investment-service
+        run: docker build -t ghcr.io/mr-r-b0t/cloud-project:investment-service ./investment-service
 
       - name: build notification service
-        run: docker build -t ghcr.io/glyps/mr-r-b0t/cloud-project:notification-service ./notification-service
+        run: docker build -t ghcr.io/mr-r-b0t/cloud-project:notification-service ./notification-service
 
       - name: build payment service
-        run: docker build -t ghcr.io/glyps/mr-r-b0t/cloud-project:payment-service ./payment-service
+        run: docker build -t ghcr.io/mr-r-b0t/cloud-project:payment-service ./payment-service
 
       - name: build property service
         run: docker build -t ghcr.io/mr-r-b0t/cloud-project:property-service ./property-service
