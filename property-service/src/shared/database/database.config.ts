@@ -8,7 +8,7 @@ const schema = Joi.object({
 export const databaseConfig = registerAs(
   'database',
   async (): Promise<{ url: string }> => {
-    const config = { url: process.env[`TYPEORM_URI`] };
+      const config = { url: process.env[`TYPEORM_URI`] || 'postgres://ssaproject:ssapassword@postgres:5432/ssa'};
     return schema.validateAsync(config);
   },
 );

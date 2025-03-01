@@ -20,7 +20,7 @@ export class PaymentService {
 
   constructor(private configService: ConfigService) {
     // Initialize Stripe with secret key from config
-    this.stripe = new Stripe(this.configService.get('STRIPE_SECRET'), {apiVersion: '2024-12-18.acacia',});
+    this.stripe = new Stripe(this.configService.get('STRIPE_SECRET') , {apiVersion: '2024-12-18.acacia',});
   }
 
   //Method to recharge wallet
