@@ -16,8 +16,8 @@ spec:
       containers:
         - name: property-service
           image: ghcr.io/mr-r-b0t/cloud-project-property-service:lastest
-          imagePullSecrets:
-            - name: ghcr-login-secret
+      imagePullSecrets:
+        - name: ghcr-login-secret
           ports:
             - containerPort: 3002
           env:

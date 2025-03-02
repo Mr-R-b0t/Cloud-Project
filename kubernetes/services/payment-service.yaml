@@ -16,8 +16,8 @@ spec:
       containers:
         - name: payment-service
           image: ghcr.io/mr-r-b0t/cloud-project-payment-service:latest
-          imagePullSecrets:
-            - name: ghcr-login-secret
+      imagePullSecrets:
+        - name: ghcr-login-secret
           ports:
             - containerPort: 3004
           env:

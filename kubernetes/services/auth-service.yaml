@@ -18,8 +18,8 @@ spec:
           image: ghcr.io/mr-r-b0t/cloud-project-auth-service:lastest
           ports:
             - containerPort: 3000
-          imagePullSecrets:
-            - name: ghcr-login-secret
+      imagePullSecrets:
+        - name: ghcr-login-secret
           env:
             - name: NODE_ENV
               value: production
