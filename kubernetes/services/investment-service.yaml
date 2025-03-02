@@ -41,28 +41,4 @@ spec:
     app: investment-service
   ports:
     - port: 3002
-      nodePort: 2000
       targetPort: 3002
-
----
-
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
-metadata:
-  name: investment-service-proxy
-spec:
-    hosts:
-        - "*"
-    gateways:
-        - microservice-gateway
-    http:
-        - match:
-            - uri:
-                prefix: /investment/
-          rewrite:
-            uri: /
-        - route:
-            - destination:
-                host: investment-service.propertystake.svc.cluster.local
-                port:
-                    number: 3002
