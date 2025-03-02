@@ -16,7 +16,9 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: ghcr.io/mr-r-b0t/cloud-project-user-service:user-service
+          image: ghcr.io/mr-r-b0t/cloud-project-user-service:latest
+          imagePullSecrets:
+            - name: ghcr-login-secret
           ports:
             - containerPort: 3001
           env:

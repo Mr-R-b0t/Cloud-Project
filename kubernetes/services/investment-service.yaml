@@ -16,6 +16,8 @@ spec:
       containers:
         - name: investment-service
           image: ghcr.io/mr-r-b0t/cloud-project-investment-service:latest
+          imagePullSecrets:
+            - name: ghcr-login-secret
           ports:
             - containerPort: 3003
           env:
