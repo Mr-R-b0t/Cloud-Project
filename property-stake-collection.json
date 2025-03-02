@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "ae53fbca-1492-4e3a-80d1-79eaa190b3f3",
-		"name": "SSA-Project",
+		"_postman_id": "b30dbdc3-66f2-4f7b-a856-b71fbfa3143e",
+		"name": "PropertyStake",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "41623732",
-		"_collection_link": "https://orange-flare-250319.postman.co/workspace/Team-Workspace~8133dad4-e531-4053-8fd8-738239069bf2/collection/41623455-ae53fbca-1492-4e3a-80d1-79eaa190b3f3?action=share&source=collection_link&creator=41623732"
+		"_exporter_id": "24908887"
 	},
 	"item": [
 		{
@@ -25,15 +24,17 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"testtest23@example.com\",\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\",\n  \"password\": \"password123\",\n  \"role\": \"customer\"\n}"
+							"raw": "{\n  \"email\": \"testtesdt23@example.com\",\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\",\n  \"password\": \"password123\",\n  \"role\": \"customer\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:3000/users/create",
+							"raw": "http://185.216.27.159/users/create",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
 							"path": [
 								"users",
 								"create"
@@ -50,7 +51,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1Yjk5ZmNlYy1kMWIyLTQzOTEtODNmZC1lNDljY2QwYjA2YzAiLCJlbWFpbCI6InZhbEBjdXN0b21lci5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3MzgxODM0OTAsImV4cCI6MTczODE4NDM5MH0.Ue9-tqsuINGk1u_d3Hj6obh7cZmjgjU655asrA2BZSg",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyZjVkMjU1MC04ZWNkLTQ1YzItYmI2Ny02ZmMzM2Y0MTYxMWYiLCJlbWFpbCI6InRlc3R0ZXN0MjNAZXhhbXBsZS5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3NDA5NDc2NzYsImV4cCI6MTc0MDk0ODU3Nn0.jwRgrTM1NdVCni-FK3vBTRF_zUTyw4LpdkojyOy-U0A",
 									"type": "string"
 								}
 							]
@@ -63,12 +64,14 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/users/me",
+							"raw": "http://185.216.27.159/users/me",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
 							"path": [
 								"users",
 								"me"
@@ -98,12 +101,15 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/users/profile/:id",
+							"raw": "http://185.216.27.159/users/profile/:id",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"users",
 								"profile",
@@ -138,12 +144,15 @@
 							"raw": "{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe Updated\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:3000/users/me/update",
+							"raw": "http://185.216.27.159/users/me/update",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"users",
 								"me",
@@ -182,12 +191,15 @@
 							"raw": "{\n  \"firstname\": \"Jane\",\n  \"lastname\": \"Smith\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:3000/users/update/:id",
+							"raw": "http://185.216.27.159/users/update/:id",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"users",
 								"update",
@@ -224,12 +236,15 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/users/wallet/me/balance",
+							"raw": "http://185.216.27.159/users/wallet/me/balance",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"users",
 								"wallet",
@@ -261,12 +276,15 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/users/wallet/balance/:id",
+							"raw": "http://185.216.27.159/users/wallet/balance/:id",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"users",
 								"wallet",
@@ -312,12 +330,15 @@
 							"raw": "{\n  \"amount\": -2000\n}"
 						},
 						"url": {
-							"raw": "http://localhost:3000/users/wallet/update/5b99fcec-d1b2-4391-83fd-e49ccd0b06c0",
+							"raw": "http://185.216.27.159/users/wallet/update/5b99fcec-d1b2-4391-83fd-e49ccd0b06c0",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"users",
 								"wallet",
@@ -349,12 +370,15 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/users/me",
+							"raw": "http://185.216.27.159/users/me",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"users",
 								"me"
@@ -384,12 +408,15 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/users/profile/f418c06c-1b55-4547-97a8-606175d23120",
+							"raw": "http://185.216.27.159/users/profile/f418c06c-1b55-4547-97a8-606175d23120",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"users",
 								"profile",
@@ -420,12 +447,15 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/users/retrieve/all",
+							"raw": "http://185.216.27.159/users/retrieve/all",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"users",
 								"retrieve",
@@ -464,12 +494,15 @@
 							"raw": "{\n  \"role\": \"customer\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:3000/users/role/update/ec5edfb2-7455-4c2d-8838-f3d6d18206d1",
+							"raw": "http://185.216.27.159/users/role/update/ec5edfb2-7455-4c2d-8838-f3d6d18206d1",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"users",
 								"role",
@@ -495,7 +528,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\" : \"testuser@example.com@example.com\",\r\n    \"password\" : \"password123\"\r\n}",
+							"raw": "{\r\n    \"email\" : \"testtest23@example.com\",\r\n    \"password\" : \"password123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -503,12 +536,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/auth/login",
+							"raw": "http://185.216.27.159/auth/login",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"auth",
 								"login"
@@ -542,12 +578,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/auth/logout",
+							"raw": "http://185.216.27.159/auth/logout",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"auth",
 								"logout"
@@ -581,12 +620,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/auth/refresh",
+							"raw": "http://185.216.27.159/auth/refresh",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"auth",
 								"refresh"
@@ -707,12 +749,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/properties",
+							"raw": "http://185.216.27.159/properties",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"properties"
 							]
@@ -736,12 +781,15 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/properties/5",
+							"raw": "http://185.216.27.159/properties/5",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"properties",
 								"5"
@@ -766,12 +814,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/properties/opened",
+							"raw": "http://185.216.27.159/properties/opened",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"properties",
 								"opened"
@@ -796,12 +847,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/properties/1",
+							"raw": "http://185.216.27.159/properties/1",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"properties",
 								"1"
@@ -826,12 +880,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/properties/",
+							"raw": "http://185.216.27.159/properties/",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"properties",
 								""
@@ -861,12 +918,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/investments/get/all",
+							"raw": "http://185.216.27.159/investments/get/all",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"investments",
 								"get",
@@ -882,12 +942,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/investments/:id",
+							"raw": "http://185.216.27.159/investments/:id",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"investments",
 								":id"
@@ -908,12 +971,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/investments/user/:userId",
+							"raw": "http://185.216.27.159/investments/user/:userId",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"investments",
 								"user",
@@ -935,12 +1001,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/investments/property/:propertyId",
+							"raw": "http://185.216.27.159/investments/property/:propertyId",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"investments",
 								"property",
@@ -981,12 +1050,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/investments/invest",
+							"raw": "http://185.216.27.159/investments/invest",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"investments",
 								"invest"
@@ -1010,12 +1082,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/investments/distribute-income",
+							"raw": "http://185.216.27.159/investments/distribute-income",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"investments",
 								"distribute-income"
@@ -1039,12 +1114,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/investments/refund",
+							"raw": "http://185.216.27.159/investments/refund",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"investments",
 								"refund"
@@ -1078,12 +1156,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/investments/sell",
+							"raw": "http://185.216.27.159/investments/sell",
 							"protocol": "http",
 							"host": [
-								"localhost"
+								"185",
+								"216",
+								"27",
+								"159"
 							],
-							"port": "3000",
+							"port": "80",
 							"path": [
 								"investments",
 								"sell"
