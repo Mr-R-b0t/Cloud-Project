@@ -44,19 +44,11 @@ minikube addons enable ingress
 ### 3. Clone the Repository
 
 ```bash
-git clone https://github.com/Cyb0nix/cloud-project.git
+git clone https://github.com/Mr-R-b0t/Cloud-Project.git
 cd cloud-project
 ```
 
-### 4. Configure Environment Variables
-
-```bash
-cp user-service/.env.example user-service/.env
-cp payment-service/.env.example payment-service/.env
-# Repeat for other services
-```
-
-### 5. Deploy to Kubernetes
+### 4. Deploy to Kubernetes
 
 ```bash
 # Deploy PostgreSQL
@@ -72,11 +64,19 @@ kubectl apply -f kubernetes/istio/
 kubectl apply -f kubernetes/security/
 ```
 
-### 6. See the pods running
+### 5. See the pods running
 
 ```bash
 kubectl get pods
 ```
+
+### 6. Access the deployed project
+
+The project is accessible at `http://185.216.27.159`.
+
+### Postman Collection:
+
+- [PostMan Collection](SSA-Project.postman_collection.json)
 
 ### 7. Labs verification
 
