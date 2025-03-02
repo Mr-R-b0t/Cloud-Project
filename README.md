@@ -1,56 +1,91 @@
-# SSA-Project 2024-2025
+# Cloud-Project 2024-2025
 
 ### Fractional Property Ownership System (PropertyStake - Real Estate)
 
-This project involves designing and implementing a fractional property ownership system that enables real estate investors to purchase shares in high-performing rental properties. Investors earn returns through rental income and property appreciation, making real estate investment more accessible and liquid.
+A cloud-native system enabling fractional ownership of real estate properties. Built with Kubernetes, Istio, and NestJS microservices.
 
-### Key Features:
-- **Investor & Agent Roles:** Investors purchase shares, while agents manage property listings.
-- **Wallet System:** Investors deposit funds, receive rental income, and reinvest earnings.
-- **Online Payments:** Transactions are handled via an external payment gateway (e.g., Stripe).
-- **Exit Windows:** Investors can sell shares to add liquidity to their investments.
-- **Automated Notifications:** Payment receipts and funding updates are sent via email.
-- **Scalable Architecture:** Designed to handle high transaction loads.
+---
 
-### Technical Overview:
+## Key Features
 
-![diagram](diagram.png)
+- **Role-Based Access**: Investors and agents with distinct permissions.
+- **Automated Payments**: Integration with Stripe for transactions.
+- **Persistent Storage**: PostgreSQL with Kubernetes `StatefulSet`.
+- **Scalability**: Microservices orchestrated via Kubernetes and Istio.
+- **Security**: RBAC, HTTPS (Let’s Encrypt), and Istio mTLS.
 
-- **Microservice Architecture:** Utilizes NestJS, Docker, and Kubernetes.
-- **Database:** Managed with PostgreSQL.
-- **Authentication:** JWT-based authentication with role-based access control.
-- **API Gateway:** Centralized entry point for all services, implemented with NestJS and `http-proxy-middleware`.
-- **Services:**
-    - **User Service:** Manages user accounts and profiles.
-    - **Property Service:** Handles property listings and details.
-    - **Investment Service:** Manages investments and shares.
-    - **Payment Service:** Processes payments and transactions.
-    - **Notification Service:** Sends automated notifications.
+---
 
-### Setup Instructions:
-1. **Clone the repository:**
-   ```sh
-   git clone https://github.com/Cyb0nix/ssa-project.git
-   cd ssa-project
-    ```
-2. **Add copy the .env.example file and rename it to .env in each service folder:**
-   ```sh
-   cp .env.example .env
-   ```
+## Technical Architecture
 
-3**start the services:**
-   ```sh
-   docker-compose up --build
-   ```
-4**Access the API Gateway at `http://localhost:3000`.**
+![Architecture Diagram](diagram.png)
 
-### Postman Collection:
-- [PostMan Collection](SSA-Project.postman_collection.json)
+- **Backend**: NestJS microservices.
+- **Database**: PostgreSQL with persistent volumes.
+- **Infrastructure**: Docker, Kubernetes (Minikube), Istio.
+- **Security**: JWT, RBAC, cert-manager.
+- **Monitoring**: Istio Kiali and Prometheus.
+
+---
+
+## Setup Guide
+
+### 1. Prerequisites
+
+- Install [Docker](https://docs.docker.com/get-docker/), [Minikube](https://minikube.sigs.k8s.io/docs/start/), [kubectl](https://kubernetes.io/docs/tasks/tools/), and [Istio](https://istio.io/latest/docs/setup/getting-started/).
+
+### 2. Start Minikube
+
+```bash
+minikube start --driver=docker
+minikube addons enable ingress
+```
+
+### 3. Clone the Repository
+
+```bash
+git clone https://github.com/Cyb0nix/cloud-project.git
+cd cloud-project
+```
+
+### 4. Configure Environment Variables
+
+```bash
+cp user-service/.env.example user-service/.env
+cp payment-service/.env.example payment-service/.env
+# Repeat for other services
+```
+
+### 5. Deploy to Kubernetes
+
+```bash
+# Deploy PostgreSQL
+kubectl apply -f kubernetes/postgres/
+
+# Deploy Microservices
+kubectl apply -f kubernetes/services/
+
+# Deploy Istio Configurations
+kubectl apply -f kubernetes/istio/
+
+# Deploy Security Policies
+kubectl apply -f kubernetes/security/
+```
+
+### 6. See the pods running
+
+```bash
+kubectl get pods
+```
+
+### 7. Labs verification
+
+![Adrian](adrian.png)
+![Cédric](cédric.png)
+![Sébastien](sébastien.png)
 
 ### Contributors:
-- Cédric YOGANATHAN
-- Julien KLEIN
-- Sébastien MEYNET
-- Valentin LABRUNE
-- Adriaan MEULENBELT-ZUMER
 
+- [Cédric YOGANATHAN](https://github.com/Cyb0nix)
+- [Sébastien MEYNET](https://github.com/Mr-R-b0t)
+- [Adriaan MEULENBELT-ZUMER](https://github.com/Edran0111)
