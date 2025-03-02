@@ -1,4 +1,4 @@
-name: Build & Push Docker Image
+name: Build & Push Docker Images
 
 permissions:
   packages: write
@@ -13,31 +13,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: build investement service
-        run: docker build -t ghcr.io/mr-r-b0t/cloud-project-investment-service:investment-service ./investment-service
-
-      - name: build notification service
-        run: docker build -t ghcr.io/mr-r-b0t/cloud-project-notification-service:notification-service ./notification-service
-
-      - name: build payment service
-        run: docker build -t ghcr.io/mr-r-b0t/cloud-project-payment-service:payment-service ./payment-service
-
-      - name: build property service
-        run: docker build -t ghcr.io/mr-r-b0t/cloud-project-property-service:property-service ./property-service
-
-      - name: build user service
-        run: docker build -t ghcr.io/mr-r-b0t/cloud-project-user-service:user-service ./user-service
-
-      - name: login to ghcr
+      - name: Login to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: push to ghrc
-        run: docker push ghcr.io/mr-r-b0t/cloud-project-investment-service:investment-service && 
-                docker push ghcr.io/mr-r-b0t/cloud-project-notification-service:notification-service && 
-                docker push ghcr.io/mr-r-b0t/cloud-project-payment-service:payment-service && 
-                docker push ghcr.io/mr-r-b0t/cloud-project-property-service:property-service && 
-                docker push ghcr.io/mr-r-b0t/cloud-project-user-service:user-service
-
-
+      - name: Build & Push Docker Images
+        env:
+          IMAGE_PREFIX: ghcr.io/mr-r-b0t/cloud-project
+        run: |
+          services=("investment-service" "notification-service" "payment-service" "property-service" "user-service" "api-gateway")
+          for service in "${services[@]}"; do
+            IMAGE_NAME="$IMAGE_PREFIX-$service:$service"
+            IMAGE_LATEST="$IMAGE_PREFIX-$service:latest"
+            
+            echo "Building $IMAGE_NAME..."
+            docker build -t $IMAGE_NAME -t $IMAGE_LATEST ./$service
+            
+            echo "Pushing $IMAGE_NAME and $IMAGE_LATEST..."
+            docker push $IMAGE_NAME
+            docker push $IMAGE_LATEST
+          done
