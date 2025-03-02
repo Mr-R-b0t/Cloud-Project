@@ -1,0 +1,12 @@
+apiVersion: security.istio.io/v1beta1
+kind: RequestAuthentication
+metadata:
+  name: jwt-auth
+  namespace: propertystake
+spec:
+  selector:
+    matchLabels:
+      app: propertystake
+  jwtRules:
+    - issuer: "auth-service.propertystake.svc.cluster.local"
+      jwksUri: "http://auth-service.propertystake.svc.cluster.local/.well-known/jwks.json"
