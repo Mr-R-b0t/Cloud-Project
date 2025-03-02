@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: auth-service
-          image: ghcr.io/mr-r-b0t/cloud-project-auth-service:lastest
+          image: ghcr.io/mr-r-b0t/cloud-project-auth-service:latest
           ports:
             - containerPort: 3000
           env:
