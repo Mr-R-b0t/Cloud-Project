@@ -8,7 +8,7 @@ spec:
   tls:
     - hosts:
         - propertystake.cybonix.fr
-      secretName: auth-service-tls
+      secretName: propertystake-ingress
   rules:
     - host: propertystake.cybonix.fr
       http:
