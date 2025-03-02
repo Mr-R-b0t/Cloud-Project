@@ -17,8 +17,6 @@ spec:
       containers:
         - name: user-service
           image: ghcr.io/mr-r-b0t/cloud-project-user-service:latest
-      imagePullSecrets:
-        - name: ghcr-login-secret
           ports:
             - containerPort: 3001
           env:
@@ -26,7 +24,8 @@ spec:
               value: production
             - name: DATABASE_URL
               value: "postgresql://ssaproject:ssapassword@postgres-service:5432/ssa"
-
+      imagePullSecrets:
+        - name: ghcr-login-secret
 ---
 
 apiVersion: v1

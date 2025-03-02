@@ -16,8 +16,6 @@ spec:
       containers:
         - name: property-service
           image: ghcr.io/mr-r-b0t/cloud-project-property-service:lastest
-      imagePullSecrets:
-        - name: ghcr-login-secret
           ports:
             - containerPort: 3002
           env:
@@ -27,7 +25,8 @@ spec:
               value: "postgresql://ssaproject:ssapassword@postgres-service:5432/ssa"
             - name: INVESTMENT_SERVICE_URL
               value: "http://investment-service:3003"
-
+      imagePullSecrets:
+        - name: ghcr-login-secret
 ---
 
 apiVersion: v1

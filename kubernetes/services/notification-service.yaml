@@ -16,14 +16,14 @@ spec:
       containers:
         - name: notification-service
           image: ghcr.io/mr-r-b0t/cloud-project-notification-service:lastest
-      imagePullSecrets:
-        - name: ghcr-login-secret
+
           ports:
             - containerPort: 3005
           env:
             - name: NODE_ENV
               value: production
-
+      imagePullSecrets:
+        - name: ghcr-login-secret
 ---
 
 apiVersion: v1
