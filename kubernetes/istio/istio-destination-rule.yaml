@@ -32,59 +32,53 @@ kind: DestinationRule
 metadata:
   name: property-service-dr
 spec:
-    host: property-service
-    trafficPolicy:
-        loadBalancer:
-        simple: LEAST_REQUEST
-    subsets:
-      - name: v1
-        labels:
-            version: v1
-
+  host: property-service
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_REQUEST
+  subsets:
+    - name: v1
+      labels:
+        version: v1
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: investment-service-dr
 spec:
-    host: investment-service
-    trafficPolicy:
-        loadBalancer:
-        simple: LEAST_REQUEST
-    subsets:
-      - name: v1
-        labels:
-            version: v1
-
+  host: investment-service
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_REQUEST
+  subsets:
+    - name: v1
+      labels:
+        version: v1
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: payment-service-dr
-
 spec:
-    host: payment-service
-    trafficPolicy:
-        loadBalancer:
-        simple: LEAST_REQUEST
-    subsets:
-      - name: v1
-        labels:
-            version: v1
-
+  host: payment-service
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_REQUEST
+  subsets:
+    - name: v1
+      labels:
+        version: v1
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: notification-service-dr
 spec:
-    host: notification-service
-    trafficPolicy:
-        loadBalancer:
-        simple: LEAST_REQUEST
-    subsets:
-      - name: v1
-        labels:
-            version: v1
-
----
+  host: notification-service
+  trafficPolicy:
+    loadBalancer:
+      simple: LEAST_REQUEST
+  subsets:
+    - name: v1
+      labels:
+        version: v1
