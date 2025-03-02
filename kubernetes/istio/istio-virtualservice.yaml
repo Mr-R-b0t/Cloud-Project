@@ -11,7 +11,7 @@ spec:
   http:
     - match:
         - uri:
-            prefix: /auth/*
+            prefix: /auth
       route:
         - destination:
             host: auth-service
@@ -19,7 +19,7 @@ spec:
               number: 3000
     - match:
         - uri:
-            prefix: /users/*
+            prefix: /users
       route:
         - destination:
             host: user-service
@@ -27,7 +27,7 @@ spec:
               number: 3001
     - match:
         - uri:
-            prefix: /properties/*
+            prefix: /properties
       route:
         - destination:
             host: property-service
@@ -35,7 +35,7 @@ spec:
               number: 3002
     - match:
         - uri:
-            prefix: /investments/*
+            prefix: /investments
       route:
         - destination:
             host: investment-service
@@ -43,7 +43,7 @@ spec:
               number: 3003
     - match:
         - uri:
-            prefix: /payments/*
+            prefix: /payments
       route:
         - destination:
             host: payment-service
@@ -51,7 +51,7 @@ spec:
               number: 3004
     - match:
         - uri:
-            prefix: /notifications/*
+            prefix: /notifications
       route:
         - destination:
             host: notification-service
