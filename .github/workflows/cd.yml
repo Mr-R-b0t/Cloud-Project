@@ -23,7 +23,7 @@ jobs:
         env:
           IMAGE_PREFIX: ghcr.io/mr-r-b0t/cloud-project
         run: |
-          services=("investment-service" "notification-service" "payment-service" "property-service" "user-service")
+          services=("investment-service" "notification-service" "payment-service" "property-service" "user-service" "auth-service")
           for service in "${services[@]}"; do
             IMAGE_NAME="$IMAGE_PREFIX-$service:$service"
             IMAGE_LATEST="$IMAGE_PREFIX-$service:latest"
