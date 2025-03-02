@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+        - name: payment-service
+          image: ghcr.io/mr-r-b0t/cloud-project-payment-service:payment-service
+          ports:
+            - containerPort: 3004
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: DATABASE_URL
+              value: "postgresql://ssaproject:ssapassword@postgres-service:5432/ssa"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3004

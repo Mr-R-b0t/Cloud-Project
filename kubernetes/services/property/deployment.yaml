@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: property-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: property-service
+  template:
+    metadata:
+      labels:
+        app: property-service
+    spec:
+      containers:
+        - name: property-service
+          image: ghcr.io/mr-r-b0t/cloud-project-property-service:lastest
+          ports:
+            - containerPort: 3002
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: DATABASE_URL
+              value: "postgresql://ssaproject:ssapassword@postgres-service:5432/ssa"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3002
