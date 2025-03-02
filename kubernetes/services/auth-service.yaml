@@ -23,6 +23,8 @@ spec:
               value: production
             - name: JWT_SECRET
               value: "VEpQQzZkZ0YhP0tCeUBoOUNBNWFQcG84IzZ6c1BRSGVxSlgmNGJiYmFDaW4/WEwjTkRiQUtZNGZKQjhoOGJHR2FnQ2lHR1BScVRoM2EmTUdMWXNhQ01CTGM/I0t6P05KRWIkc2doSERiQVNlJmtqZHI0SFhkSmRA"
+            - name: DATABASE_URL
+              value: "postgresql://ssaproject:ssapassword@postgres-service:5432/ssa"
       imagePullSecrets:
         - name: ghcr-login-secret
 ---
