@@ -13,9 +13,13 @@ import { Property } from '../entities/property.entity';
 import { Funding } from '../entities/funding.entity';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
+import * as process from "node:process";
 
 @Injectable()
 export class PropertyService {
+
+  private readonly INVESTEMENT_SERVICE_URL = process.env.INVESTEMENT_SERVICE_URL;
+
   constructor(
     @InjectRepository(Property)
     private readonly propertyRepository: Repository<Property>,
@@ -81,9 +85,8 @@ export class PropertyService {
     const deadline = new Date(property.fundingDeadline);
     if (deadline < new Date()) {
       // Refund investors and change status back to "open to funding"
-      const refundService = this.configService.get<string>('localhost:3003');
       await this.httpService
-        .post(`${refundService}/refund`, { propertyId: id })
+        .post(`${this.INVESTEMENT_SERVICE_URL}/refund`, { propertyId: id })
         .toPromise();
       property.status = 'open to funding';
       await this.propertyRepository.save(property);

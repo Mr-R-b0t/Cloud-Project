@@ -1,8 +1,9 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { CreatePaymentDto } from './../controller/dto/create-payment.js';
+import { CreatePaymentDto } from '../controller/dto/create-payment';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 import axios from "axios"
+import * as process from "node:process";
 
 interface Payment {
   id: string;
@@ -14,9 +15,11 @@ interface Payment {
 
 @Injectable()
 export class PaymentService {
-  private readonly DEFAULT_PAYMENT_METHOD = "card";
   private stripe: Stripe;
   private payments: Map<string, Payment> = new Map();
+
+  private readonly USER_SERVICE_URL = process.env.USER_SERVICE_URL;
+    private readonly NOTIFICATION_SERVICE_URL = process.env.NOTIFICATION_SERVICE_URL;
 
   constructor(private configService: ConfigService) {
     // Initialize Stripe with secret key from config
@@ -25,8 +28,7 @@ export class PaymentService {
 
   //Method to recharge wallet
   async rechargeWallet(userId: string, dto: CreatePaymentDto) {
-    const paymentMethod = dto.paymentMethod || this.DEFAULT_PAYMENT_METHOD;
-    const senderResponse = await axios.get(`http://localhost:3001/users/wallet/balance/${userId}`);
+    const senderResponse = await axios.get(`${this.USER_SERVICE_URL}/users/wallet/balance/${userId}`);
     const userBalance = senderResponse.data;
     if (userBalance < dto.amount) {
       // Insufficient funds
@@ -61,7 +63,7 @@ export class PaymentService {
       try {
         console.log(paymentIntent.status)
         const response = await axios.patch(
-          `http://localhost:3001/users/wallet/update/${userId}`, 
+          `${this.USER_SERVICE_URL}/users/wallet/update/${userId}`,
           { amount: dto.amount },  
           {
             headers: {
@@ -134,11 +136,11 @@ export class PaymentService {
   private async handleSuccessfulPayment(paymentIntent: Stripe.PaymentIntent) {
     try {
       console.log("id transaction", paymentIntent.id);
-        const response = await axios.post(
-        `http://localhost:3005/notifications/sendMail`, 
+        await axios.post(
+        `http://${this.NOTIFICATION_SERVICE_URL}/notifications/sendMail`,
         {
           id: paymentIntent.id,
-          object: "Payment successfull !", 
+          object: "Payment successfull !",
           body: "You have sucessfully paid you order !",
         },
         {
@@ -160,10 +162,8 @@ export class PaymentService {
   private async handleFailedPayment(paymentIntent: Stripe.PaymentIntent) {
     try{
 
-    const payment = this.payments.get(paymentIntent.id);
-    
     const response = await axios.post(
-      `http://localhost:3005/notifications/sendMail`, 
+      `http://${this.NOTIFICATION_SERVICE_URL}/notifications/sendMail`,
       {
         id: paymentIntent.id,
         object: "Payment failed :/", 
@@ -186,8 +186,7 @@ export class PaymentService {
 
   // Method to withdraw from wallet
   async withrawFromWallet(userId: string, dto: CreatePaymentDto) {
-    const paymentMethod = dto.paymentMethod || this.DEFAULT_PAYMENT_METHOD;
-    const senderResponse = await axios.get(`http://localhost:3001/users/wallet/balance/${userId}`); // get user balance
+    const senderResponse = await axios.get(`${this.USER_SERVICE_URL}/users/wallet/balance/${userId}`); // get user balance
     const userBalance = senderResponse.data;
     if (userBalance < dto.amount) {
       throw new HttpException('Insufficient funds', HttpStatus.BAD_REQUEST);
@@ -219,7 +218,7 @@ export class PaymentService {
     if (paymentIntent.status === 'succeeded') {
       try {
         const response = await axios.patch(
-          `http://localhost:3001/users/wallet/update/${userId}`, 
+          `${this.USER_SERVICE_URL}/users/wallet/update/${userId}`,
           { amount: -dto.amount },  
           {
             headers: {

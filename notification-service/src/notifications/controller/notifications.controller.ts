@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Headers, HttpException, Req, UseGuards, RawBodyRequest, Res, HttpCode, HttpStatus  } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { CreateMailDto } from './../controller/dto/create-mail';
 import { NotificationsService } from '../service/notifications.service';
 

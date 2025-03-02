@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: investment-service
-          image: ghcr.io/mr-r-b0t/cloud-project-investment-service:investment-service
+          image: ghcr.io/mr-r-b0t/cloud-project-investment-service:latest
           ports:
             - containerPort: 3003
           env:
@@ -22,7 +22,20 @@ spec:
               value: production
             - name: DATABASE_URL
               value: "postgresql://ssaproject:ssapassword@postgres-service:5432/ssa"
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 3003
+            - name: USER_SERVICE_URL
+              value: "http://user-service:3001"
+            - name: PROPERTY_SERVICE_URL
+              value: "http://property-service:3002"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: investment-service
+spec:
+  selector:
+    app: investment-service
+  ports:
+    - port: 3002
+      targetPort: 3002

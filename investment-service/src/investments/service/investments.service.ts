@@ -4,11 +4,12 @@ import { InvestmentEntity } from '../entity/investments.entity';
 import { Repository } from 'typeorm';
 import { CreateInvestmentDto } from '../controller/dto/create-investement.dto';
 import axios from 'axios';
+import * as process from "node:process";
 
 @Injectable()
 export class InvestmentsService {
-    private readonly USER_SERVICE_URL = 'http://localhost:3001/users';
-    private readonly PROPERTY_SERVICE_URL = 'http://localhost:3002/properties';
+    private readonly USER_SERVICE_URL = process.env.USER_SERVICE_URL;
+    private readonly PROPERTY_SERVICE_URL = process.env.PROPERTY_SERVICE_URL;
 
     constructor(
         @InjectRepository(InvestmentEntity) private readonly investmentRepository: Repository<InvestmentEntity>,
