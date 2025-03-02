@@ -17,6 +17,7 @@ spec:
         - name: auth-service
           image: ghcr.io/mr-r-b0t/cloud-project-auth-service:latest
           ports:
+            - nodePort: 2000
             - containerPort: 3000
           env:
             - name: NODE_ENV
@@ -40,3 +41,27 @@ spec:
   ports:
     - port: 3000
       targetPort: 3000
+
+
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: auth-service-proxy
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - microservice-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /auth/
+      rewrite:
+        uri: /
+      route:
+        - destination:
+            port:
+              number: 3000
+            host: auth-service.propertystake.svc.cluster.local
