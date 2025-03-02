@@ -1,14 +1,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: api-gateway-ingress
+  name: auth-service-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   tls:
     - hosts:
         - your-domain.com
-      secretName: api-gateway-tls
+      secretName: auth-service-tls
   rules:
     - host: your-domain.com
       http:
@@ -17,6 +17,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: api-gateway
+                name: auth-service
                 port:
                   number: 80

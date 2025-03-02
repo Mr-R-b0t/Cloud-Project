@@ -3,7 +3,7 @@ version: '3.8'
 services:
   api-gateway:
     build:
-      context: ./api-gateway
+      context: ./auth-service
       dockerfile: Dockerfile
     ports:
       - "3000:3000"

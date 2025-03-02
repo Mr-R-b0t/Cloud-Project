@@ -1,7 +1,8 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: gateway
+  name: propertystake-gateway
+  namespace: propertystake
 spec:
   selector:
     istio: ingressgateway
